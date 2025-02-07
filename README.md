@@ -2,6 +2,8 @@
 
 A Model Context Protocol server implementation for ClickUp integration, enabling AI assistants to interact with ClickUp workspaces.
 
+<a href="https://glama.ai/mcp/servers/9a7p2exf6u"><img width="380" height="200" src="https://glama.ai/mcp/servers/9a7p2exf6u/badge" alt="ClickUp Server MCP server" /></a>
+
 ## Quick Start
 
 1. Configure Claude for Desktop:
