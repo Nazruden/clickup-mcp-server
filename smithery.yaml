@@ -1,0 +1,33 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - clickupClientId
+      - clickupClientSecret
+    properties:
+      clickupClientId:
+        type: string
+        description: The OAuth client ID for ClickUp.
+      clickupClientSecret:
+        type: string
+        description: The OAuth client secret for ClickUp.
+      clickupRedirectUri:
+        type: string
+        default: http://localhost:3000/oauth/callback
+        description: The OAuth redirect URI for ClickUp.
+      port:
+        type: number
+        default: 3000
+        description: The port for the server.
+      logLevel:
+        type: string
+        default: info
+        description: The logging level.
+  commandFunction:
+    # A function that produces the CLI command to start the MCP on stdio.
+    |-
+    config => ({ command: 'node', args: ['dist/index.js'], env: { CLICKUP_CLIENT_ID: config.clickupClientId, CLICKUP_CLIENT_SECRET: config.clickupClientSecret, CLICKUP_REDIRECT_URI: config.clickupRedirectUri, PORT: config.port.toString(), LOG_LEVEL: config.logLevel } })
