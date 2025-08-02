@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { jest, describe, it, expect, beforeEach } from "@jest/globals";
+
 import { FolderService } from "../../../services/resources/folder.service.js";
 import {
   GetFoldersParams,

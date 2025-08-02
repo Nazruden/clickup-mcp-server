@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { jest, describe, it, expect, beforeEach } from "@jest/globals";
+
 import { CustomFieldService } from "../../../services/resources/custom-field.service.js";
 import {
   ClickUpCustomField,

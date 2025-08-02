@@ -1,5 +1,4 @@
 import axios, { AxiosInstance } from "axios";
-import { jest, describe, it, expect, beforeEach } from "@jest/globals";
 import { SpaceService } from "../../../services/resources/space.service.js";
 import {
   GetSpacesParams,

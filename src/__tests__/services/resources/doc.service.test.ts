@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { jest, describe, it, expect, beforeEach } from "@jest/globals";
+
 import { DocService } from "../../../services/resources/doc.service.js";
 import {
   SearchDocsParams,

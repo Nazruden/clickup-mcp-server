@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { jest, describe, it, expect, beforeEach } from "@jest/globals";
+
 import { ViewService } from "../../../services/resources/view.service.js";
 import {
   // Import necessary View types for tests
