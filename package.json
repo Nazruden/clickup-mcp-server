@@ -48,24 +48,24 @@
     "axios": "^1.11.0",
     "cross-env": "^10.0.0",
     "dotenv": "^17.2.1",
-    "express": "^4.21.2",
-    "open": "^8.4.2"
+    "express": "^5.1.0"
   },
   "devDependencies": {
-    "@types/express": "^4.17.21",
-    "@types/jest": "^29.5.11",
-    "@types/node": "^20.11.16",
-    "@types/supertest": "^6.0.2",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.1.0",
+    "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.20.0",
     "add-js-extension": "^1.0.4",
     "eslint": "^8.56.0",
-    "jest": "^29.7.0",
-    "prettier": "^3.2.4",
-    "supertest": "^6.3.4",
-    "ts-jest": "^29.1.2",
+    "jest": "^30.0.5",
+    "open": "^10.2.0",
+    "prettier": "^3.6.2",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.0",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.9.2"
   },
   "engines": {
     "node": ">=14.0.0"

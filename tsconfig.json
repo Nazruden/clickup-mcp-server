@@ -14,6 +14,7 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": true,
+    "isolatedModules": true,
     "types": ["node", "jest"]
   },
   "include": ["src/**/*"],
