@@ -1,0 +1,157 @@
+name: 🔍 PR - Review & Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [ main, develop ]
+
+jobs:
+  pr-info:
+    name: 📋 PR Information
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📋 PR Size Analysis
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo, number } = context.issue;
+            const pr = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: number
+            });
+            
+            const additions = pr.data.additions;
+            const deletions = pr.data.deletions;
+            const changedFiles = pr.data.changed_files;
+            
+            let size = '🟢 Small';
+            let risk = '🟢 Low';
+            
+            if (additions + deletions > 1000) {
+              size = '🔴 Large';
+              risk = '🔴 High';
+            } else if (additions + deletions > 500) {
+              size = '🟡 Medium';
+              risk = '🟡 Medium';
+            }
+            
+            const comment = `
+            ## 📊 PR Analysis
+            
+            | Metric | Value |
+            |--------|-------|
+            | **Size** | ${size} |
+            | **Risk Level** | ${risk} |
+            | **Lines Added** | +${additions} |
+            | **Lines Deleted** | -${deletions} |
+            | **Files Changed** | ${changedFiles} |
+            
+            ${size.includes('Large') ? '⚠️ **Large PR detected!** Consider breaking this into smaller PRs for easier review.' : ''}
+            ${risk.includes('High') ? '🚨 **High risk changes!** Please ensure thorough testing and review.' : ''}
+            `;
+            
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: number,
+              body: comment
+            });
+
+  validate:
+    name: ✅ Validation
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          
+      - name: 📦 Install dependencies
+        run: npm ci
+        
+      - name: 🔍 Check commit messages
+        run: |
+          # Check if commits follow conventional commit format
+          git log --oneline origin/main..HEAD | while read line; do
+            if ! echo "$line" | grep -qE '^[a-f0-9]+ (feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+'; then
+              echo "❌ Invalid commit message format: $line"
+              echo "Please use conventional commits: type(scope): description"
+              exit 1
+            fi
+          done
+          
+      - name: 📋 Check for breaking changes
+        id: breaking
+        run: |
+          if git log --oneline origin/main..HEAD | grep -q "BREAKING CHANGE\|!:"; then
+            echo "breaking=true" >> $GITHUB_OUTPUT
+            echo "⚠️ Breaking changes detected!"
+          else
+            echo "breaking=false" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: 🧪 Run tests
+        run: npm test
+        
+      - name: 📊 Test coverage check
+        run: |
+          npm run test:coverage
+          COVERAGE=$(cat coverage/lcov.info | grep "end_of_record" | wc -l)
+          echo "Test coverage files: $COVERAGE"
+          
+      - name: 🏗️ Build check
+        run: npm run build
+        
+      - name: 📦 Package size check
+        run: |
+          npm pack --dry-run
+          SIZE=$(npm pack --dry-run | grep "package size" | awk '{print $3}')
+          echo "Package size: $SIZE"
+
+  security-review:
+    name: 🔒 Security Review
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          
+      - name: 📦 Install dependencies
+        run: npm ci
+        
+      - name: 🔍 Dependency security scan
+        run: npm audit --audit-level moderate
+        
+      - name: 🔍 Check for sensitive files
+        run: |
+          if find . -name "*.key" -o -name "*.pem" -o -name "*.p12" -o -name "*.pfx" | grep -v node_modules; then
+            echo "❌ Sensitive files detected!"
+            exit 1
+          fi
+          
+      - name: 🔍 Check for secrets in code
+        run: |
+          if grep -r "password\|secret\|token\|key" src/ --include="*.ts" --include="*.js" | grep -v "// TODO\|// FIXME"; then
+            echo "⚠️ Potential secrets found in code. Please review."
+          fi

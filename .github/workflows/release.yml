@@ -1,0 +1,103 @@
+name: 🏷️ Release Management
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - 'docs/**'
+
+jobs:
+  release:
+    name: 🏷️ Create Release
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'chore(release)')"
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          
+      - name: 📦 Install dependencies
+        run: npm ci
+        
+      - name: 🧪 Run tests
+        run: npm test
+        
+      - name: 🏗️ Build project
+        run: npm run build
+        
+      - name: 📋 Generate changelog
+        id: changelog
+        run: |
+          # Install conventional-changelog-cli if not present
+          if ! command -v conventional-changelog &> /dev/null; then
+            npm install -g conventional-changelog-cli
+          fi
+          
+          # Generate changelog
+          CHANGELOG=$(conventional-changelog -p angular -r 2 | tail -n +3 | head -n -1)
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+      - name: 🏷️ Extract version
+        id: version
+        run: |
+          VERSION=$(node -pe "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+          
+      - name: 🔍 Check if tag exists
+        id: tag_check
+        run: |
+          if git rev-parse "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: 🏷️ Create tag
+        if: steps.tag_check.outputs.exists == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v${{ steps.version.outputs.version }}" -m "Release v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"
+          
+      - name: 🚀 Create GitHub Release
+        if: steps.tag_check.outputs.exists == 'false'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          release_name: 🚀 Release ${{ steps.version.outputs.version }}
+          body: |
+            ## 🎉 What's Changed
+            
+            ${{ steps.changelog.outputs.changelog }}
+            
+            ## 📦 Installation
+            
+            ```bash
+            npm install @nazruden/clickup-server@${{ steps.version.outputs.version }}
+            ```
+            
+            ## 🔗 Links
+            - 📋 [Changelog](CHANGELOG.md)
+            - 📖 [Documentation](README.md)
+            - 🐛 [Report Issues](https://github.com/${{ github.repository }}/issues)
+            
+            **Full Changelog**: https://github.com/${{ github.repository }}/compare/v${{ steps.previous_version.outputs.version }}...v${{ steps.version.outputs.version }}
+          draft: false
+          prerelease: false

@@ -1,0 +1,103 @@
+# Repository settings for GitHub
+repository:
+  name: clickup-mcp-server
+  description: "🔧 ClickUp MCP Server - Model Context Protocol integration for ClickUp API"
+  homepage: https://github.com/nazruden/clickup-mcp-server
+  topics:
+    - clickup
+    - mcp
+    - model-context-protocol
+    - api
+    - automation
+    - typescript
+    - nodejs
+  private: false
+  has_issues: true
+  has_projects: true
+  has_wiki: false
+  has_downloads: true
+  default_branch: main
+  allow_squash_merge: true
+  allow_merge_commit: false
+  allow_rebase_merge: true
+  delete_branch_on_merge: true
+  enable_automated_security_fixes: true
+  enable_vulnerability_alerts: true
+
+# Branch protection rules
+branches:
+  - name: main
+    protection:
+      required_status_checks:
+        strict: true
+        contexts:
+          - "🔍 Test Suite (20)"
+          - "🧹 Code Quality"
+          - "🔒 Security Scan"
+      enforce_admins: false
+      required_pull_request_reviews:
+        required_approving_review_count: 1
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: false
+        require_last_push_approval: false
+      restrictions: null
+      allow_force_pushes: false
+      allow_deletions: false
+
+# Labels for issues and PRs
+labels:
+  - name: "bug"
+    color: "d73a4a"
+    description: "Something isn't working"
+  
+  - name: "enhancement"
+    color: "a2eeef"
+    description: "New feature or request"
+  
+  - name: "documentation"
+    color: "0075ca"
+    description: "Improvements or additions to documentation"
+  
+  - name: "good first issue"
+    color: "7057ff"
+    description: "Good for newcomers"
+  
+  - name: "help wanted"
+    color: "008672"
+    description: "Extra attention is needed"
+  
+  - name: "invalid"
+    color: "e4e669"
+    description: "This doesn't seem right"
+  
+  - name: "question"
+    color: "d876e3"
+    description: "Further information is requested"
+  
+  - name: "wontfix"
+    color: "ffffff"
+    description: "This will not be worked on"
+  
+  - name: "dependencies"
+    color: "0366d6"
+    description: "Dependencies updates"
+  
+  - name: "security"
+    color: "ff6b6b"
+    description: "Security related"
+  
+  - name: "needs-triage"
+    color: "fef2c0"
+    description: "Needs initial triage"
+  
+  - name: "high priority"
+    color: "b60205"
+    description: "High priority issue"
+  
+  - name: "medium priority"
+    color: "fbca04"
+    description: "Medium priority issue"
+  
+  - name: "low priority"
+    color: "0e8a16"
+    description: "Low priority issue"
