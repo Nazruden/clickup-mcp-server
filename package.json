@@ -44,10 +44,10 @@
   "author": "MCP Team",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "0.6.0",
-    "axios": "^1.6.7",
-    "cross-env": "^7.0.3",
-    "dotenv": "^16.4.1",
+    "@modelcontextprotocol/sdk": "^1.17.1",
+    "axios": "^1.11.0",
+    "cross-env": "^10.0.0",
+    "dotenv": "^17.2.1",
     "express": "^4.21.2",
     "open": "^8.4.2"
   },

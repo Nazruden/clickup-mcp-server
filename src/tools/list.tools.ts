@@ -22,7 +22,7 @@ export const getListsTool: Tool = {
     required: ["folder_id"],
   },
   outputSchema: {
-    type: "string",
+    type: "object",
     description: "A JSON string representing an array of list objects.",
   },
 };

@@ -26,7 +26,7 @@ export const createBoardTool: Tool = {
     required: ["space_id", "name"],
   },
   outputSchema: {
-    type: "string",
+    type: "object",
     description: "A JSON string representing the created board view object.",
   },
 };

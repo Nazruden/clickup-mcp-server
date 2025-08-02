@@ -14,7 +14,7 @@ export const getTeamsTool: Tool = {
   outputSchema: {
     // The 'text' field in the response content will be a JSON string representing an array of team objects.
     // While the MCP content type is 'text', this describes the structure of the stringified JSON.
-    type: "string",
+    type: "object",
     description:
       "A JSON string representing an array of team objects. Each object should have at least 'id' and 'name'.",
     // It's also common to have no outputSchema or a very generic one when the content type is 'text'
