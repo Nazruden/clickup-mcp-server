@@ -1,4 +1,4 @@
-import { jest, describe, it, expect, beforeEach } from "@jest/globals";
+
 import { ClickUpService } from "../../services/clickup.service.js";
 import { ViewService } from "../../services/resources/view.service.js";
 import {
@@ -63,12 +63,12 @@ describe("View Tool Handlers", () => {
     MockedClickUpService.mockClear();
 
     mockViewService = {
-      getViews: jest.fn<ViewService["getViews"]>(),
-      createView: jest.fn<ViewService["createView"]>(),
-      getViewDetails: jest.fn<ViewService["getViewDetails"]>(),
-      updateView: jest.fn<ViewService["updateView"]>(),
-      deleteView: jest.fn<ViewService["deleteView"]>(),
-      getViewTasks: jest.fn<ViewService["getViewTasks"]>(),
+      getViews: jest.fn(),
+      createView: jest.fn(),
+      getViewDetails: jest.fn(),
+      updateView: jest.fn(),
+      deleteView: jest.fn(),
+      getViewTasks: jest.fn(),
     };
 
     // Manually construct an object that will serve as our mocked ClickUpService instance.
