@@ -89,8 +89,19 @@ export const createTaskTool: Tool = {
         properties: {
           id: { type: "string" },
           name: { type: "string" },
-          status: { type: "string" }
-        }
+          status: { 
+            type: "object",
+            properties: {
+              id: { type: "string" },
+              status: { type: "string" },
+              color: { type: "string" },
+              orderindex: { type: "number" },
+              type: { type: "string" }
+            },
+            additionalProperties: true
+          }
+        },
+        additionalProperties: true
       }
     },
     description: "An object containing the created task object in the 'task' property.",
@@ -120,8 +131,19 @@ export const updateTaskTool: Tool = {
         properties: {
           id: { type: "string" },
           name: { type: "string" },
-          status: { type: "string" }
-        }
+          status: { 
+            type: "object",
+            properties: {
+              id: { type: "string" },
+              status: { type: "string" },
+              color: { type: "string" },
+              orderindex: { type: "number" },
+              type: { type: "string" }
+            },
+            additionalProperties: true
+          }
+        },
+        additionalProperties: true
       }
     },
     description: "An object containing the updated task object in the 'task' property.",
@@ -165,7 +187,7 @@ export async function handleCreateTask(
   );
 
   // Construct the payload for ClickUpService, performing necessary transformations
-  const servicePayload: ClickUpTask = {
+  const servicePayload: any = {
     list_id: toolArgs.list_id,
     name: toolArgs.name,
     // No other fields will be set from toolArgs in this minimal test
@@ -185,16 +207,21 @@ export async function handleCreateTask(
     servicePayload.time_estimate = String(toolArgs.time_estimate);
   if (toolArgs.tags !== undefined) servicePayload.tags = toolArgs.tags;
 
-  const response = await clickUpService.taskService.createTask(servicePayload);
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(response, null, 2),
-      },
-    ],
-    structuredContent: { task: response },
-  };
+  try {
+    const response = await clickUpService.taskService.createTask(servicePayload);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(response, null, 2),
+        },
+      ],
+      structuredContent: { task: response },
+    };
+  } catch (error) {
+    logger.error(`Error in ${createTaskTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to create task");
+  }
 }
 
 // Interface for arguments expected by updateTaskTool, based on its inputSchema
@@ -225,7 +252,7 @@ export async function handleUpdateTask(
   const { task_id, ...updateDataFromToolArgs } = toolArgs;
 
   // Construct the payload for ClickUpService, performing necessary transformations
-  const servicePayloadUpdate: Partial<ClickUpTask> = {};
+  const servicePayloadUpdate: any = {};
 
   // Map defined fields from toolArgs to servicePayloadUpdate
   if (updateDataFromToolArgs.name !== undefined)
@@ -257,17 +284,22 @@ export async function handleUpdateTask(
   }
 
   logger.info(`Handling tool call: ${updateTaskTool.name} for task ${task_id}`);
-  const response = await clickUpService.taskService.updateTask(
-    task_id,
-    servicePayloadUpdate,
-  );
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(response, null, 2),
-      },
-    ],
-    structuredContent: { task: response },
-  };
+  try {
+    const response = await clickUpService.taskService.updateTask(
+      task_id,
+      servicePayloadUpdate,
+    );
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(response, null, 2),
+        },
+      ],
+      structuredContent: { task: response },
+    };
+  } catch (error) {
+    logger.error(`Error in ${updateTaskTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to update task");
+  }
 }
