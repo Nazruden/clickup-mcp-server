@@ -137,7 +137,7 @@ export const getViewDetailsTool: Tool = {
 
 export const updateViewTool: Tool = {
   name: "clickup_update_view",
-  description: "Updates an existing View.",
+  description: "Updates an existing View. Note: ClickUp API v2 /view/{view_id} PUT endpoint currently has known issues (Internal Server Error).",
   inputSchema: {
     type: "object",
     properties: {
@@ -355,6 +355,10 @@ export async function handleUpdateView(
     };
   } catch (error) {
     logger.error(`Error in ${updateViewTool.name}:`, error);
+    // Check if this is the known ClickUp API issue with view updates
+    if (error instanceof Error && error.message.includes("Internal Server Error")) {
+      throw new Error("ClickUp API limitation: View update endpoint currently returns Internal Server Error. This is a known issue with ClickUp's API v2 /view/{view_id} PUT endpoint.");
+    }
     throw error instanceof Error ? error : new Error("Failed to update view");
   }
 }
