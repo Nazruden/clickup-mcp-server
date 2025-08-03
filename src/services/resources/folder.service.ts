@@ -16,7 +16,7 @@ export class FolderService {
   }
 
   async getFolders(
-    params: GetFoldersParams
+    params: GetFoldersParams,
   ): Promise<{ folders: ClickUpFolder[] }> {
     logger.debug(`Fetching folders for space ID: ${params.space_id}`);
     try {
@@ -26,7 +26,7 @@ export class FolderService {
       }
       const response = await this.client.get(
         `/space/${params.space_id}/folder`,
-        { params: queryParams }
+        { params: queryParams },
       );
       // API v2 for Get Folders returns { folders: [...] }
       return response.data;
@@ -38,11 +38,11 @@ export class FolderService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error fetching folders for space ${params.space_id}: ${error.message}`
+          `Generic error fetching folders for space ${params.space_id}: ${error.message}`,
         );
       }
       throw new Error("Failed to retrieve folders from ClickUp");
@@ -51,13 +51,13 @@ export class FolderService {
 
   async createFolder(params: CreateFolderParams): Promise<ClickUpFolder> {
     logger.debug(
-      `Creating folder in space ID: ${params.space_id} with name: ${params.name}`
+      `Creating folder in space ID: ${params.space_id} with name: ${params.name}`,
     );
     try {
       const { space_id, ...bodyParams } = params;
       const response = await this.client.post<ClickUpFolder>(
         `/space/${space_id}/folder`,
-        bodyParams
+        bodyParams,
       );
       return response.data;
     } catch (error) {
@@ -68,11 +68,11 @@ export class FolderService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error creating folder in space ${params.space_id}: ${error.message}`
+          `Generic error creating folder in space ${params.space_id}: ${error.message}`,
         );
       }
       throw new Error("Failed to create folder in ClickUp");
@@ -83,7 +83,7 @@ export class FolderService {
     logger.debug(`Fetching folder ID: ${folder_id}`);
     try {
       const response = await this.client.get<ClickUpFolder>(
-        `/folder/${folder_id}`
+        `/folder/${folder_id}`,
       );
       return response.data;
     } catch (error) {
@@ -94,11 +94,11 @@ export class FolderService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error fetching folder ${folder_id}: ${error.message}`
+          `Generic error fetching folder ${folder_id}: ${error.message}`,
         );
       }
       throw new Error("Failed to retrieve folder from ClickUp");
@@ -111,7 +111,7 @@ export class FolderService {
     try {
       const response = await this.client.put<ClickUpFolder>(
         `/folder/${folder_id}`,
-        bodyParams
+        bodyParams,
       );
       return response.data;
     } catch (error) {
@@ -122,11 +122,11 @@ export class FolderService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error updating folder ${params.folder_id}: ${error.message}`
+          `Generic error updating folder ${params.folder_id}: ${error.message}`,
         );
       }
       throw new Error("Failed to update folder in ClickUp");
@@ -137,7 +137,7 @@ export class FolderService {
     logger.debug(`Deleting folder ID: ${folder_id}`);
     try {
       const response = await this.client.delete<ClickUpSuccessResponse>(
-        `/folder/${folder_id}`
+        `/folder/${folder_id}`,
       );
       return response.data;
     } catch (error) {
@@ -148,11 +148,11 @@ export class FolderService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error deleting folder ${folder_id}: ${error.message}`
+          `Generic error deleting folder ${folder_id}: ${error.message}`,
         );
       }
       throw new Error("Failed to delete folder in ClickUp");

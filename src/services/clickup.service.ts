@@ -81,7 +81,7 @@ export class ClickUpService {
     if (!this.personalToken) {
       // This should be caught by config validation, but double-check
       throw new Error(
-        "ClickUp Personal API Token is missing in configuration."
+        "ClickUp Personal API Token is missing in configuration.",
       );
     }
 
@@ -106,7 +106,7 @@ export class ClickUpService {
       (error) => {
         logger.error("Error adding Authorization header:", error);
         return Promise.reject(error);
-      }
+      },
     );
 
     // Keep existing response interceptor for rate limiting
@@ -114,11 +114,11 @@ export class ClickUpService {
       (response) => {
         // ... rate limit logging ...
         const remaining = parseInt(
-          response.headers["x-ratelimit-remaining"] || "100"
+          response.headers["x-ratelimit-remaining"] || "100",
         );
         const reset = parseInt(response.headers["x-ratelimit-reset"] || "0");
         logger.debug(
-          `Rate limit: ${remaining} requests remaining, reset in ${reset}s`
+          `Rate limit: ${remaining} requests remaining, reset in ${reset}s`,
         );
         return response;
       },
@@ -128,7 +128,7 @@ export class ClickUpService {
           logger.warn("Rate limit exceeded");
         }
         return Promise.reject(error);
-      }
+      },
     );
 
     // Instantiate resource services
@@ -213,7 +213,7 @@ export class ClickUpService {
       // Interceptor will add auth header
       const response = await this.client.get(
         `/api/v2/folder/${folderId}/list`,
-        {}
+        {},
       );
       return response.data.lists;
     } catch (error) {
@@ -233,7 +233,7 @@ export class ClickUpService {
         // Ensure space_id is present
         `/api/v2/space/${boardData.space_id}/board`,
         boardData,
-        {}
+        {},
       );
       return response.data;
     } catch (error) {

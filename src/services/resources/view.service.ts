@@ -51,7 +51,7 @@ export class ViewService {
     try {
       const response = await this.client.get<{ views: ClickUpView[] }>(
         `/${pathSegment}/${parent_id}/view`,
-        {}
+        {},
       );
       return response.data.views;
     } catch (error) {
@@ -62,15 +62,15 @@ export class ViewService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error fetching views for ${parent_type} ${parent_id}: ${error.message}`
+          `Generic error fetching views for ${parent_type} ${parent_id}: ${error.message}`,
         );
       }
       throw new Error(
-        `Failed to retrieve views for ${parent_type} ${parent_id} from ClickUp`
+        `Failed to retrieve views for ${parent_type} ${parent_id} from ClickUp`,
       );
     }
   }
@@ -79,12 +79,12 @@ export class ViewService {
     const { parent_id, parent_type, ...bodyParams } = params;
     const pathSegment = this.getViewParentPathSegment(parent_type);
     logger.debug(
-      `Creating view for ${parent_type} ID: ${parent_id} with name: ${bodyParams.name}`
+      `Creating view for ${parent_type} ID: ${parent_id} with name: ${bodyParams.name}`,
     );
     try {
       const response = await this.client.post<ClickUpView>(
         `/${pathSegment}/${parent_id}/view`,
-        bodyParams // Contains name, type, settings, etc.
+        bodyParams, // Contains name, type, settings, etc.
       );
       return response.data;
     } catch (error) {
@@ -95,15 +95,15 @@ export class ViewService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error creating view for ${parent_type} ${parent_id}: ${error.message}`
+          `Generic error creating view for ${parent_type} ${parent_id}: ${error.message}`,
         );
       }
       throw new Error(
-        `Failed to create view for ${parent_type} ${parent_id} in ClickUp`
+        `Failed to create view for ${parent_type} ${parent_id} in ClickUp`,
       );
     }
   }
@@ -122,7 +122,7 @@ export class ViewService {
         });
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error fetching view ${view_id}: ${error.message}`
+          `Generic error fetching view ${view_id}: ${error.message}`,
         );
       }
       throw new Error(`Failed to retrieve view ${view_id} from ClickUp`);
@@ -135,7 +135,7 @@ export class ViewService {
     try {
       const response = await this.client.put<ClickUpView>(
         `/view/${view_id}`,
-        bodyParams
+        bodyParams,
       );
       return response.data;
     } catch (error) {
@@ -147,7 +147,7 @@ export class ViewService {
         });
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error updating view ${view_id}: ${error.message}`
+          `Generic error updating view ${view_id}: ${error.message}`,
         );
       }
       throw new Error(`Failed to update view ${view_id} in ClickUp`);
@@ -158,7 +158,7 @@ export class ViewService {
     logger.debug(`Deleting view ID: ${view_id}`);
     try {
       const response = await this.client.delete<ClickUpSuccessResponse>(
-        `/view/${view_id}`
+        `/view/${view_id}`,
       );
       return response.data;
     } catch (error) {
@@ -170,7 +170,7 @@ export class ViewService {
         });
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error deleting view ${view_id}: ${error.message}`
+          `Generic error deleting view ${view_id}: ${error.message}`,
         );
       }
       throw new Error(`Failed to delete view ${view_id} in ClickUp`);
@@ -178,7 +178,7 @@ export class ViewService {
   }
 
   async getViewTasks(
-    params: GetViewTasksParams
+    params: GetViewTasksParams,
   ): Promise<GetViewTasksResponse> {
     const { view_id, page } = params;
     logger.debug(`Fetching tasks for view ID: ${view_id}, page: ${page ?? 0}`);
@@ -190,7 +190,7 @@ export class ViewService {
     try {
       const response = await this.client.get<GetViewTasksResponse>(
         `/view/${view_id}/task`,
-        { params: queryParams }
+        { params: queryParams },
       );
       return response.data;
     } catch (error) {
@@ -201,15 +201,15 @@ export class ViewService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error fetching tasks for view ${view_id}: ${error.message}`
+          `Generic error fetching tasks for view ${view_id}: ${error.message}`,
         );
       }
       throw new Error(
-        `Failed to retrieve tasks for view ${view_id} from ClickUp`
+        `Failed to retrieve tasks for view ${view_id} from ClickUp`,
       );
     }
   }

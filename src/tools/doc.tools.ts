@@ -213,14 +213,14 @@ export const editDocPageContentTool: Tool = {
 // Handler Functions
 export async function handleSearchDocs(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as SearchDocsParams;
   if (!params.team_id || typeof params.team_id !== "string") {
     throw new Error("Team ID is required.");
   }
   logger.info(
-    `Handling tool call: ${searchDocsTool.name} for team ${params.team_id}`
+    `Handling tool call: ${searchDocsTool.name} for team ${params.team_id}`,
   );
   const docs = await clickUpService.docService.searchDocs(params);
   return {
@@ -235,7 +235,7 @@ export async function handleSearchDocs(
 
 export async function handleCreateDoc(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as CreateDocParams;
   if (!params.workspace_id || typeof params.workspace_id !== "string") {
@@ -245,7 +245,7 @@ export async function handleCreateDoc(
     throw new Error("Doc name is required.");
   }
   logger.info(
-    `Handling tool call: ${createDocTool.name} for workspace ${params.workspace_id} with name ${params.name}`
+    `Handling tool call: ${createDocTool.name} for workspace ${params.workspace_id} with name ${params.name}`,
   );
   const newDoc = await clickUpService.docService.createDoc(params);
   return {
@@ -260,14 +260,14 @@ export async function handleCreateDoc(
 
 export async function handleGetDocPages(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as GetDocPagesParams;
   if (!params.doc_id || typeof params.doc_id !== "string") {
     throw new Error("Doc ID is required.");
   }
   logger.info(
-    `Handling tool call: ${getDocPagesTool.name} for doc ${params.doc_id}`
+    `Handling tool call: ${getDocPagesTool.name} for doc ${params.doc_id}`,
   );
   const pages = await clickUpService.docService.getDocPages(params);
   return {
@@ -282,7 +282,7 @@ export async function handleGetDocPages(
 
 export async function handleCreateDocPage(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as CreateDocPageParams;
   if (!params.workspace_id || typeof params.workspace_id !== "string") {
@@ -295,7 +295,7 @@ export async function handleCreateDocPage(
     throw new Error("Page name (title) is required.");
   }
   logger.info(
-    `Handling tool call: ${createDocPageTool.name} for doc ${params.doc_id} in workspace ${params.workspace_id}`
+    `Handling tool call: ${createDocPageTool.name} for doc ${params.doc_id} in workspace ${params.workspace_id}`,
   );
   const newPage = await clickUpService.docService.createDocPage(params);
   return {
@@ -310,7 +310,7 @@ export async function handleCreateDocPage(
 
 export async function handleGetDocPageContent(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as GetDocPageContentParams;
   if (!params.workspace_id || typeof params.workspace_id !== "string") {
@@ -323,7 +323,7 @@ export async function handleGetDocPageContent(
     throw new Error("Page ID is required.");
   }
   logger.info(
-    `Handling tool call: ${getDocPageContentTool.name} for page ${params.page_id} in doc ${params.doc_id}, workspace ${params.workspace_id}`
+    `Handling tool call: ${getDocPageContentTool.name} for page ${params.page_id} in doc ${params.doc_id}, workspace ${params.workspace_id}`,
   );
   const pageContent = await clickUpService.docService.getDocPageContent(params);
   return {
@@ -341,7 +341,7 @@ export async function handleGetDocPageContent(
 
 export async function handleEditDocPageContent(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as EditDocPageContentParams;
   if (!params.workspace_id || typeof params.workspace_id !== "string") {
@@ -357,7 +357,7 @@ export async function handleEditDocPageContent(
     throw new Error("Content is required to edit a doc page.");
   }
   logger.info(
-    `Handling tool call: ${editDocPageContentTool.name} for page ${params.page_id} in doc ${params.doc_id}, workspace ${params.workspace_id}`
+    `Handling tool call: ${editDocPageContentTool.name} for page ${params.page_id} in doc ${params.doc_id}, workspace ${params.workspace_id}`,
   );
   await clickUpService.docService.editDocPageContent(params);
   return {

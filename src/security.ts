@@ -53,7 +53,7 @@ class SecurityManager {
     const cipher = crypto.createCipheriv(
       ALGORITHM,
       Buffer.from(ENCRYPTION_KEY, "hex"),
-      iv
+      iv,
     );
 
     let encrypted = cipher.update(text, "utf8", "hex");
@@ -74,7 +74,7 @@ class SecurityManager {
     const decipher = crypto.createDecipheriv(
       ALGORITHM,
       Buffer.from(ENCRYPTION_KEY, "hex"),
-      Buffer.from(ivHex, "hex")
+      Buffer.from(ivHex, "hex"),
     );
 
     decipher.setAuthTag(Buffer.from(authTagHex, "hex"));

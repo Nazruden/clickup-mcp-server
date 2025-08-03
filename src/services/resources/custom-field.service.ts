@@ -20,7 +20,7 @@ export class CustomFieldService {
     try {
       const response = await this.client.get<{ fields: ClickUpCustomField[] }>(
         `/list/${listId}/field`,
-        {}
+        {},
       );
       return response.data.fields;
     } catch (error) {
@@ -31,27 +31,27 @@ export class CustomFieldService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error fetching custom fields for list ${listId}: ${error.message}`
+          `Generic error fetching custom fields for list ${listId}: ${error.message}`,
         );
       }
       throw new Error(
-        `Failed to retrieve custom fields for list ${listId} from ClickUp`
+        `Failed to retrieve custom fields for list ${listId} from ClickUp`,
       );
     }
   }
 
   async setTaskCustomFieldValue(
-    params: SetTaskCustomFieldValueParams
+    params: SetTaskCustomFieldValueParams,
   ): Promise<ClickUpSuccessResponse> {
     const { task_id, field_id, value, value_options } = params;
     logger.debug(
       `Setting custom field ${field_id} for task ${task_id} with value: ${JSON.stringify(
-        value
-      )}`
+        value,
+      )}`,
     );
 
     const requestBody: { value: any; value_options?: any } = { value };
@@ -63,7 +63,7 @@ export class CustomFieldService {
       const response = await this.client.post<ClickUpSuccessResponse>(
         `/task/${task_id}/field/${field_id}`,
         requestBody,
-        {}
+        {},
       );
       return response.data;
     } catch (error) {
@@ -74,21 +74,21 @@ export class CustomFieldService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error setting custom field ${field_id} for task ${task_id}: ${error.message}`
+          `Generic error setting custom field ${field_id} for task ${task_id}: ${error.message}`,
         );
       }
       throw new Error(
-        `Failed to set custom field ${field_id} for task ${task_id} in ClickUp`
+        `Failed to set custom field ${field_id} for task ${task_id} in ClickUp`,
       );
     }
   }
 
   async removeTaskCustomFieldValue(
-    params: RemoveTaskCustomFieldValueParams
+    params: RemoveTaskCustomFieldValueParams,
   ): Promise<ClickUpSuccessResponse> {
     const { task_id, field_id } = params;
     logger.debug(`Removing custom field ${field_id} for task ${task_id}`);
@@ -96,7 +96,7 @@ export class CustomFieldService {
     try {
       const response = await this.client.delete<ClickUpSuccessResponse>(
         `/task/${task_id}/field/${field_id}`,
-        {}
+        {},
       );
       return response.data;
     } catch (error) {
@@ -107,15 +107,15 @@ export class CustomFieldService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error removing custom field ${field_id} for task ${task_id}: ${error.message}`
+          `Generic error removing custom field ${field_id} for task ${task_id}: ${error.message}`,
         );
       }
       throw new Error(
-        `Failed to remove custom field ${field_id} for task ${task_id} from ClickUp`
+        `Failed to remove custom field ${field_id} for task ${task_id} from ClickUp`,
       );
     }
   }

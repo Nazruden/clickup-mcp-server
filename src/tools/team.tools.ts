@@ -27,7 +27,7 @@ export const getTeamsTool: Tool = {
 // Handler Function
 export async function handleGetTeams(
   clickUpService: ClickUpService,
-  args: Record<string, unknown> // Args likely unused but kept for consistent signature
+  args: Record<string, unknown>, // Args likely unused but kept for consistent signature
 ) {
   logger.info(`Handling tool call: ${getTeamsTool.name}`);
   try {

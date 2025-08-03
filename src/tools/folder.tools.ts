@@ -80,14 +80,14 @@ export const deleteFolderTool: Tool = {
 // Handler Functions
 export async function handleGetFolders(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as GetFoldersParams;
   if (!params.space_id || typeof params.space_id !== "string") {
     throw new Error("Space ID is required to get folders.");
   }
   logger.info(
-    `Handling tool call: ${getFoldersTool.name} for space ${params.space_id}`
+    `Handling tool call: ${getFoldersTool.name} for space ${params.space_id}`,
   );
   const responseData = await clickUpService.folderService.getFolders(params);
   return {
@@ -102,7 +102,7 @@ export async function handleGetFolders(
 
 export async function handleCreateFolder(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as CreateFolderParams;
   if (!params.space_id || typeof params.space_id !== "string") {
@@ -112,7 +112,7 @@ export async function handleCreateFolder(
     throw new Error("Folder name is required.");
   }
   logger.info(
-    `Handling tool call: ${createFolderTool.name} for space ${params.space_id}, name ${params.name}`
+    `Handling tool call: ${createFolderTool.name} for space ${params.space_id}, name ${params.name}`,
   );
   const responseData = await clickUpService.folderService.createFolder(params);
   return {
@@ -127,17 +127,17 @@ export async function handleCreateFolder(
 
 export async function handleGetFolder(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as { folder_id: string };
   if (!params.folder_id || typeof params.folder_id !== "string") {
     throw new Error("Folder ID is required.");
   }
   logger.info(
-    `Handling tool call: ${getFolderTool.name} for folder ${params.folder_id}`
+    `Handling tool call: ${getFolderTool.name} for folder ${params.folder_id}`,
   );
   const responseData = await clickUpService.folderService.getFolder(
-    params.folder_id
+    params.folder_id,
   );
   return {
     content: [
@@ -151,7 +151,7 @@ export async function handleGetFolder(
 
 export async function handleUpdateFolder(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as UpdateFolderParams;
   if (!params.folder_id || typeof params.folder_id !== "string") {
@@ -162,7 +162,7 @@ export async function handleUpdateFolder(
     throw new Error("Folder name is required for update.");
   }
   logger.info(
-    `Handling tool call: ${updateFolderTool.name} for folder ${params.folder_id}`
+    `Handling tool call: ${updateFolderTool.name} for folder ${params.folder_id}`,
   );
   const responseData = await clickUpService.folderService.updateFolder(params);
   return {
@@ -177,14 +177,14 @@ export async function handleUpdateFolder(
 
 export async function handleDeleteFolder(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as { folder_id: string };
   if (!params.folder_id || typeof params.folder_id !== "string") {
     throw new Error("Folder ID is required for deletion.");
   }
   logger.info(
-    `Handling tool call: ${deleteFolderTool.name} for folder ${params.folder_id}`
+    `Handling tool call: ${deleteFolderTool.name} for folder ${params.folder_id}`,
   );
   await clickUpService.folderService.deleteFolder(params.folder_id);
   return {

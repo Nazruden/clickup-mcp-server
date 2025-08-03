@@ -16,7 +16,7 @@ export class SpaceService {
   }
 
   async getSpaces(
-    params: GetSpacesParams
+    params: GetSpacesParams,
   ): Promise<{ spaces: ClickUpSpace[] }> {
     logger.debug(`Fetching spaces for team ID: ${params.team_id}`);
     try {
@@ -38,11 +38,11 @@ export class SpaceService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error fetching spaces for team ${params.team_id}: ${error.message}`
+          `Generic error fetching spaces for team ${params.team_id}: ${error.message}`,
         );
       }
       throw new Error("Failed to retrieve spaces from ClickUp");
@@ -51,13 +51,13 @@ export class SpaceService {
 
   async createSpace(params: CreateSpaceParams): Promise<ClickUpSpace> {
     logger.debug(
-      `Creating space in team ID: ${params.team_id} with name: ${params.name}`
+      `Creating space in team ID: ${params.team_id} with name: ${params.name}`,
     );
     try {
       const { team_id, ...bodyParams } = params;
       const response = await this.client.post<ClickUpSpace>(
         `/team/${team_id}/space`,
-        bodyParams
+        bodyParams,
       );
       return response.data;
     } catch (error) {
@@ -68,11 +68,11 @@ export class SpaceService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error creating space in team ${params.team_id}: ${error.message}`
+          `Generic error creating space in team ${params.team_id}: ${error.message}`,
         );
       }
       throw new Error("Failed to create space in ClickUp");
@@ -83,7 +83,7 @@ export class SpaceService {
     logger.debug(`Fetching space ID: ${space_id}`);
     try {
       const response = await this.client.get<ClickUpSpace>(
-        `/space/${space_id}`
+        `/space/${space_id}`,
       );
       return response.data;
     } catch (error) {
@@ -94,11 +94,11 @@ export class SpaceService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error fetching space ${space_id}: ${error.message}`
+          `Generic error fetching space ${space_id}: ${error.message}`,
         );
       }
       throw new Error("Failed to retrieve space from ClickUp");
@@ -111,7 +111,7 @@ export class SpaceService {
     try {
       const response = await this.client.put<ClickUpSpace>(
         `/space/${space_id}`,
-        bodyParams
+        bodyParams,
       );
       return response.data;
     } catch (error) {
@@ -122,11 +122,11 @@ export class SpaceService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error updating space ${params.space_id}: ${error.message}`
+          `Generic error updating space ${params.space_id}: ${error.message}`,
         );
       }
       throw new Error("Failed to update space in ClickUp");
@@ -137,7 +137,7 @@ export class SpaceService {
     logger.debug(`Deleting space ID: ${space_id}`);
     try {
       const response = await this.client.delete<ClickUpSuccessResponse>(
-        `/space/${space_id}`
+        `/space/${space_id}`,
       );
       return response.data;
     } catch (error) {
@@ -148,11 +148,11 @@ export class SpaceService {
             status: error.response?.status,
             data: error.response?.data,
             url: error.config?.url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error deleting space ${space_id}: ${error.message}`
+          `Generic error deleting space ${space_id}: ${error.message}`,
         );
       }
       throw new Error("Failed to delete space in ClickUp");

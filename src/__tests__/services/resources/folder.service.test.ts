@@ -59,7 +59,7 @@ describe("FolderService", () => {
 
       expect(mockClient.get).toHaveBeenCalledWith(
         `/space/${params.space_id}/folder`,
-        { params: { archived: "false" } }
+        { params: { archived: "false" } },
       );
       expect(result).toEqual(mockResponse.data);
     });
@@ -68,7 +68,7 @@ describe("FolderService", () => {
       const params: GetFoldersParams = { space_id: "space_123" };
       mockClient.get.mockRejectedValueOnce(new Error("API Error"));
       await expect(folderService.getFolders(params)).rejects.toThrow(
-        "Failed to retrieve folders from ClickUp"
+        "Failed to retrieve folders from ClickUp",
       );
     });
   });
@@ -99,7 +99,7 @@ describe("FolderService", () => {
 
       expect(mockClient.post).toHaveBeenCalledWith(
         `/space/${space_id}/folder`,
-        bodyParams
+        bodyParams,
       );
       expect(result).toEqual(mockResponse.data);
     });
@@ -111,7 +111,7 @@ describe("FolderService", () => {
       };
       mockClient.post.mockRejectedValueOnce(new Error("API Error"));
       await expect(folderService.createFolder(params)).rejects.toThrow(
-        "Failed to create folder in ClickUp"
+        "Failed to create folder in ClickUp",
       );
     });
   });
@@ -144,7 +144,7 @@ describe("FolderService", () => {
       const folderId = "folder_abc";
       mockClient.get.mockRejectedValueOnce(new Error("API Error"));
       await expect(folderService.getFolder(folderId)).rejects.toThrow(
-        "Failed to retrieve folder from ClickUp"
+        "Failed to retrieve folder from ClickUp",
       );
     });
   });
@@ -175,7 +175,7 @@ describe("FolderService", () => {
 
       expect(mockClient.put).toHaveBeenCalledWith(
         `/folder/${folder_id}`,
-        bodyParams
+        bodyParams,
       );
       expect(result).toEqual(mockResponse.data);
     });
@@ -187,7 +187,7 @@ describe("FolderService", () => {
       };
       mockClient.put.mockRejectedValueOnce(new Error("API Error"));
       await expect(folderService.updateFolder(params)).rejects.toThrow(
-        "Failed to update folder in ClickUp"
+        "Failed to update folder in ClickUp",
       );
     });
   });
@@ -209,7 +209,7 @@ describe("FolderService", () => {
       const folderId = "folder_todelete";
       mockClient.delete.mockRejectedValueOnce(new Error("API Error"));
       await expect(folderService.deleteFolder(folderId)).rejects.toThrow(
-        "Failed to delete folder in ClickUp"
+        "Failed to delete folder in ClickUp",
       );
     });
   });

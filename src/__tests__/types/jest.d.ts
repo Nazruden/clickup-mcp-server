@@ -1,4 +1,4 @@
-import '@types/jest';
+import "@types/jest";
 
 declare global {
   namespace jest {
@@ -6,4 +6,4 @@ declare global {
       toContainObject(object: any): R;
     }
   }
-} 
+}

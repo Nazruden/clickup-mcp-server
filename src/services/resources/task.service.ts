@@ -19,7 +19,7 @@ export class TaskService {
       const response = await this.client.post<ClickUpTask>(
         `/list/${taskData.list_id}/task`,
         taskData,
-        {}
+        {},
       );
       return response.data;
     } catch (error) {
@@ -38,14 +38,14 @@ export class TaskService {
 
   async updateTask(
     taskId: string,
-    updates: Partial<ClickUpTask>
+    updates: Partial<ClickUpTask>,
   ): Promise<ClickUpTask> {
     logger.debug(`Updating task ${taskId}`);
     try {
       const response = await this.client.put<ClickUpTask>(
         `/task/${taskId}`,
         updates,
-        {}
+        {},
       );
       return response.data;
     } catch (error) {

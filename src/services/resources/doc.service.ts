@@ -24,7 +24,7 @@ export class DocService {
   async searchDocs(params: SearchDocsParams): Promise<ClickUpDoc[]> {
     const { team_id, query, include_archived } = params;
     logger.debug(
-      `Searching docs in workspace ID (v3): ${team_id} with query: "${query}"`
+      `Searching docs in workspace ID (v3): ${team_id} with query: "${query}"`,
     );
 
     const queryParams: Record<string, string | boolean | number> = {};
@@ -32,7 +32,7 @@ export class DocService {
     if (query) {
       logger.warn(
         "The 'query' parameter for free-text search is not explicitly supported by the documented v3 /docs endpoint filters. " +
-          "Consider using specific filters like 'id' or 'creator' if general search yields no results or errors."
+          "Consider using specific filters like 'id' or 'creator' if general search yields no results or errors.",
       );
     }
     if (include_archived !== undefined) {
@@ -57,15 +57,15 @@ export class DocService {
             data: error.response?.data,
             url: v3Url,
             params: queryParams,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error searching docs (v3) in workspace ${team_id}: ${error.message}`
+          `Generic error searching docs (v3) in workspace ${team_id}: ${error.message}`,
         );
       }
       throw new Error(
-        `Failed to search docs in workspace ${team_id} from ClickUp (v3 attempt)`
+        `Failed to search docs in workspace ${team_id} from ClickUp (v3 attempt)`,
       );
     }
   }
@@ -76,22 +76,22 @@ export class DocService {
     if (!workspace_id) {
       logger.error("createDoc service method requires workspace_id.");
       throw new Error(
-        "workspace_id is required for creating a ClickUp Doc (v3)."
+        "workspace_id is required for creating a ClickUp Doc (v3).",
       );
     }
     const numericWorkspaceId = parseInt(workspace_id, 10);
     if (isNaN(numericWorkspaceId)) {
       logger.error(
-        `Invalid workspace_id: '${workspace_id}' is not a valid number.`
+        `Invalid workspace_id: '${workspace_id}' is not a valid number.`,
       );
       throw new Error(
-        `Invalid workspace_id: '${workspace_id}' must be a numeric string.`
+        `Invalid workspace_id: '${workspace_id}' must be a numeric string.`,
       );
     }
 
     if (!name) {
       logger.error(
-        "createDoc service method requires a name for the document."
+        "createDoc service method requires a name for the document.",
       );
       throw new Error("Document name is required for creating a ClickUp Doc.");
     }
@@ -112,7 +112,7 @@ export class DocService {
       requestBody.parent = parent;
     } else if (parent) {
       logger.warn(
-        "Parent ID or type is missing/invalid for createDoc. Doc will be created without parent specified in API call."
+        "Parent ID or type is missing/invalid for createDoc. Doc will be created without parent specified in API call.",
       );
     }
 
@@ -130,7 +130,7 @@ export class DocService {
       const response = await this.client.post<ClickUpDoc>(
         v3Url,
         requestBody,
-        {}
+        {},
       );
       return response.data;
     } catch (error) {
@@ -143,15 +143,15 @@ export class DocService {
             data: error.response?.data,
             url: v3Url,
             body: requestBody,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error creating doc (v3) for ${scope}: ${error.message}`
+          `Generic error creating doc (v3) for ${scope}: ${error.message}`,
         );
       }
       throw new Error(
-        `Failed to create doc for ${scope} from ClickUp (v3 attempt using spec)`
+        `Failed to create doc for ${scope} from ClickUp (v3 attempt using spec)`,
       );
     }
   }
@@ -166,10 +166,10 @@ export class DocService {
     const numericWorkspaceId = parseInt(workspace_id, 10);
     if (isNaN(numericWorkspaceId)) {
       logger.error(
-        `Invalid workspace_id: '${workspace_id}' is not a valid number for getDocPages.`
+        `Invalid workspace_id: '${workspace_id}' is not a valid number for getDocPages.`,
       );
       throw new Error(
-        `Invalid workspace_id: '${workspace_id}' must be a numeric string.`
+        `Invalid workspace_id: '${workspace_id}' must be a numeric string.`,
       );
     }
     if (!doc_id) {
@@ -178,7 +178,7 @@ export class DocService {
     }
 
     logger.debug(
-      `Fetching pages for doc ID: ${doc_id} in workspace ID: ${numericWorkspaceId} (v3)`
+      `Fetching pages for doc ID: ${doc_id} in workspace ID: ${numericWorkspaceId} (v3)`,
     );
 
     // const v3Url = `https://api.clickup.com/api/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages`;
@@ -188,7 +188,7 @@ export class DocService {
     try {
       const response = await this.client.get<{ pages: ClickUpDocPage[] }>(
         v3Url,
-        { params: {} }
+        { params: {} },
       );
       return response.data.pages;
     } catch (error) {
@@ -200,15 +200,15 @@ export class DocService {
             status: error.response?.status,
             data: error.response?.data,
             url: v3Url,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error fetching pages for ${scope} (v3): ${error.message}`
+          `Generic error fetching pages for ${scope} (v3): ${error.message}`,
         );
       }
       throw new Error(
-        `Failed to retrieve pages for ${scope} from ClickUp (v3 attempt)`
+        `Failed to retrieve pages for ${scope} from ClickUp (v3 attempt)`,
       );
     }
   }
@@ -232,10 +232,10 @@ export class DocService {
     const numericWorkspaceId = parseInt(workspace_id, 10);
     if (isNaN(numericWorkspaceId)) {
       logger.error(
-        `Invalid workspace_id: '${workspace_id}' is not a valid number for createDocPage.`
+        `Invalid workspace_id: '${workspace_id}' is not a valid number for createDocPage.`,
       );
       throw new Error(
-        `Invalid workspace_id: '${workspace_id}' must be a numeric string for createDocPage.`
+        `Invalid workspace_id: '${workspace_id}' must be a numeric string for createDocPage.`,
       );
     }
     if (!doc_id) {
@@ -244,7 +244,7 @@ export class DocService {
     }
 
     logger.debug(
-      `Creating page in doc ID: ${doc_id} (workspace: ${numericWorkspaceId}) with name: "${name}"`
+      `Creating page in doc ID: ${doc_id} (workspace: ${numericWorkspaceId}) with name: "${name}"`,
     );
 
     const v3Url = `/api/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages`;
@@ -267,7 +267,7 @@ export class DocService {
 
     if (orderindex !== undefined) {
       logger.warn(
-        `'orderindex' was provided for createDocPage (doc: ${doc_id}) but is not part of the v3 API spec request body. It will be ignored.`
+        `'orderindex' was provided for createDocPage (doc: ${doc_id}) but is not part of the v3 API spec request body. It will be ignored.`,
       );
     }
 
@@ -275,7 +275,7 @@ export class DocService {
       const response = await this.client.post<ClickUpDocPage>(
         v3Url,
         requestBody,
-        {}
+        {},
       );
       return response.data;
     } catch (error) {
@@ -287,15 +287,15 @@ export class DocService {
             data: error.response?.data,
             url: v3Url,
             body: requestBody,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error creating page in doc ${doc_id} (workspace: ${numericWorkspaceId}): ${error.message}`
+          `Generic error creating page in doc ${doc_id} (workspace: ${numericWorkspaceId}): ${error.message}`,
         );
       }
       throw new Error(
-        `Failed to create page in doc ${doc_id} (workspace: ${numericWorkspaceId}) in ClickUp (v3 attempt)`
+        `Failed to create page in doc ${doc_id} (workspace: ${numericWorkspaceId}) in ClickUp (v3 attempt)`,
       );
     }
   }
@@ -306,16 +306,16 @@ export class DocService {
     if (!workspace_id) {
       logger.error("getDocPageContent service method requires workspace_id.");
       throw new Error(
-        "workspace_id is required for getting Doc Page content (v3)."
+        "workspace_id is required for getting Doc Page content (v3).",
       );
     }
     const numericWorkspaceId = parseInt(workspace_id, 10);
     if (isNaN(numericWorkspaceId)) {
       logger.error(
-        `Invalid workspace_id: '${workspace_id}' for getDocPageContent.`
+        `Invalid workspace_id: '${workspace_id}' for getDocPageContent.`,
       );
       throw new Error(
-        `Invalid workspace_id: '${workspace_id}' must be numeric for getDocPageContent.`
+        `Invalid workspace_id: '${workspace_id}' must be numeric for getDocPageContent.`,
       );
     }
     if (!doc_id) {
@@ -328,7 +328,7 @@ export class DocService {
     }
 
     logger.debug(
-      `Fetching content for page ID: ${page_id} in doc: ${doc_id}, workspace: ${numericWorkspaceId}`
+      `Fetching content for page ID: ${page_id} in doc: ${doc_id}, workspace: ${numericWorkspaceId}`,
     );
 
     // const v3Url = `https://api.clickup.com/api/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages/${page_id}`;
@@ -359,8 +359,8 @@ export class DocService {
       } else {
         logger.warn(
           `Content not found or not a string for page ${page_id} (doc: ${doc_id}, ws: ${numericWorkspaceId}). Response data: ${JSON.stringify(
-            response.data
-          )}`
+            response.data,
+          )}`,
         );
         throw new Error(specificErrorMsg);
       }
@@ -379,23 +379,23 @@ export class DocService {
             data: error.response?.data,
             url: v3Url, // Use the actual v3Url in log
             params: queryParams,
-          }
+          },
         );
       } else if (error instanceof Error) {
         // For other errors not matching specificErrorMsg
         logger.error(
-          `Generic error fetching content for ${errorScope}: ${error.message}`
+          `Generic error fetching content for ${errorScope}: ${error.message}`,
         );
       }
       // Throw a generic error for issues not caught and re-thrown above
       throw new Error(
-        `Failed to retrieve content for ${errorScope} from ClickUp (v3 attempt)`
+        `Failed to retrieve content for ${errorScope} from ClickUp (v3 attempt)`,
       );
     }
   }
 
   async editDocPageContent(
-    params: EditDocPageContentParams
+    params: EditDocPageContentParams,
   ): Promise<ClickUpDocPage> {
     const {
       workspace_id,
@@ -411,16 +411,16 @@ export class DocService {
     if (!workspace_id) {
       logger.error("editDocPageContent service method requires workspace_id.");
       throw new Error(
-        "workspace_id is required for editing Doc Page content (v3)."
+        "workspace_id is required for editing Doc Page content (v3).",
       );
     }
     const numericWorkspaceId = parseInt(workspace_id, 10);
     if (isNaN(numericWorkspaceId)) {
       logger.error(
-        `Invalid workspace_id: '${workspace_id}' for editDocPageContent.`
+        `Invalid workspace_id: '${workspace_id}' for editDocPageContent.`,
       );
       throw new Error(
-        `Invalid workspace_id: '${workspace_id}' must be numeric for editDocPageContent.`
+        `Invalid workspace_id: '${workspace_id}' must be numeric for editDocPageContent.`,
       );
     }
     if (!doc_id) {
@@ -435,7 +435,7 @@ export class DocService {
     // Title (name) is also optional in API spec.
 
     logger.debug(
-      `Editing content for page ID: ${page_id} in doc: ${doc_id}, workspace: ${numericWorkspaceId}`
+      `Editing content for page ID: ${page_id} in doc: ${doc_id}, workspace: ${numericWorkspaceId}`,
     );
 
     // const v3Url = `https://api.clickup.com/api/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages/${page_id}`;
@@ -464,7 +464,7 @@ export class DocService {
       const response = await this.client.put<ClickUpDocPage>(
         v3Url,
         requestBody,
-        {}
+        {},
       );
       return response.data;
     } catch (error) {
@@ -477,15 +477,15 @@ export class DocService {
             data: error.response?.data,
             url: v3Url, // Use the actual v3Url in log
             body: requestBody,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error editing content for ${errorScope}: ${error.message}`
+          `Generic error editing content for ${errorScope}: ${error.message}`,
         );
       }
       throw new Error(
-        `Failed to edit content for ${errorScope} in ClickUp (v3 attempt)`
+        `Failed to edit content for ${errorScope} in ClickUp (v3 attempt)`,
       );
     }
   }

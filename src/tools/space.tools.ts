@@ -110,14 +110,14 @@ export const deleteSpaceTool: Tool = {
 // Handler Functions
 export async function handleGetSpaces(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as GetSpacesParams;
   if (!params.team_id || typeof params.team_id !== "string") {
     throw new Error("Team ID (Workspace ID) is required.");
   }
   logger.info(
-    `Handling tool call: ${getSpacesTool.name} for team ${params.team_id}`
+    `Handling tool call: ${getSpacesTool.name} for team ${params.team_id}`,
   );
   const responseData = await clickUpService.spaceService.getSpaces(params);
   return {
@@ -132,7 +132,7 @@ export async function handleGetSpaces(
 
 export async function handleCreateSpace(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as CreateSpaceParams;
   if (!params.team_id || typeof params.team_id !== "string") {
@@ -142,7 +142,7 @@ export async function handleCreateSpace(
     throw new Error("Space name is required.");
   }
   logger.info(
-    `Handling tool call: ${createSpaceTool.name} for team ${params.team_id}, name ${params.name}`
+    `Handling tool call: ${createSpaceTool.name} for team ${params.team_id}, name ${params.name}`,
   );
   const responseData = await clickUpService.spaceService.createSpace(params);
   return {
@@ -157,17 +157,17 @@ export async function handleCreateSpace(
 
 export async function handleGetSpace(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as { space_id: string };
   if (!params.space_id || typeof params.space_id !== "string") {
     throw new Error("Space ID is required.");
   }
   logger.info(
-    `Handling tool call: ${getSpaceTool.name} for space ${params.space_id}`
+    `Handling tool call: ${getSpaceTool.name} for space ${params.space_id}`,
   );
   const responseData = await clickUpService.spaceService.getSpace(
-    params.space_id
+    params.space_id,
   );
   return {
     content: [
@@ -181,7 +181,7 @@ export async function handleGetSpace(
 
 export async function handleUpdateSpace(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as UpdateSpaceParams;
   if (!params.space_id || typeof params.space_id !== "string") {
@@ -192,7 +192,7 @@ export async function handleUpdateSpace(
     throw new Error("No update fields provided for space.");
   }
   logger.info(
-    `Handling tool call: ${updateSpaceTool.name} for space ${params.space_id}`
+    `Handling tool call: ${updateSpaceTool.name} for space ${params.space_id}`,
   );
   const responseData = await clickUpService.spaceService.updateSpace(params);
   return {
@@ -207,14 +207,14 @@ export async function handleUpdateSpace(
 
 export async function handleDeleteSpace(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as { space_id: string };
   if (!params.space_id || typeof params.space_id !== "string") {
     throw new Error("Space ID is required for deletion.");
   }
   logger.info(
-    `Handling tool call: ${deleteSpaceTool.name} for space ${params.space_id}`
+    `Handling tool call: ${deleteSpaceTool.name} for space ${params.space_id}`,
   );
   await clickUpService.spaceService.deleteSpace(params.space_id);
   return {

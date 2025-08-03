@@ -1,5 +1,5 @@
-import 'jest';
-import { SuperTest, Test } from 'supertest';
+import "jest";
+import { SuperTest, Test } from "supertest";
 
 declare global {
   namespace jest {
@@ -13,10 +13,10 @@ declare global {
 }
 
 // Augment the supertest module
-declare module 'supertest' {
+declare module "supertest" {
   interface SuperTest<T extends Test> {
     (app: any): SuperTest<T>;
   }
 }
 
-export {}; 
+export {};

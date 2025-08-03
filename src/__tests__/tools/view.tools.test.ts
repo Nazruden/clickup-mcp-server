@@ -1,4 +1,3 @@
-
 import { ClickUpService } from "../../services/clickup.service.js";
 import { ViewService } from "../../services/resources/view.service.js";
 import {
@@ -110,7 +109,7 @@ describe("View Tool Handlers", () => {
 
       const result = await handleGetViews(
         mockClickUpServiceInstance,
-        args as unknown as Record<string, unknown>
+        args as unknown as Record<string, unknown>,
       );
 
       expect(mockViewService.getViews).toHaveBeenCalledWith(args);
@@ -118,8 +117,8 @@ describe("View Tool Handlers", () => {
       expect(result.content[0].text).toContain(summaryMessage);
       const returnedData = JSON.parse(
         result.content[0].text.substring(
-          result.content[0].text.indexOf("Details: ") + 9
-        )
+          result.content[0].text.indexOf("Details: ") + 9,
+        ),
       );
       expect(returnedData).toEqual(mockViewData);
     });
@@ -128,24 +127,24 @@ describe("View Tool Handlers", () => {
       await expect(
         handleGetViews(mockClickUpServiceInstance, {
           parent_id: "123",
-        } as unknown as Record<string, unknown>)
+        } as unknown as Record<string, unknown>),
       ).rejects.toThrow(
-        "Parent ID and a valid Parent Type ('team', 'space', 'folder', 'list') are required."
+        "Parent ID and a valid Parent Type ('team', 'space', 'folder', 'list') are required.",
       );
       await expect(
         handleGetViews(mockClickUpServiceInstance, {
           parent_type: "list",
-        } as unknown as Record<string, unknown>)
+        } as unknown as Record<string, unknown>),
       ).rejects.toThrow(
-        "Parent ID and a valid Parent Type ('team', 'space', 'folder', 'list') are required."
+        "Parent ID and a valid Parent Type ('team', 'space', 'folder', 'list') are required.",
       );
       await expect(
         handleGetViews(mockClickUpServiceInstance, {
           parent_id: "123",
           parent_type: "invalid",
-        } as unknown as Record<string, unknown>)
+        } as unknown as Record<string, unknown>),
       ).rejects.toThrow(
-        "Parent ID and a valid Parent Type ('team', 'space', 'folder', 'list') are required."
+        "Parent ID and a valid Parent Type ('team', 'space', 'folder', 'list') are required.",
       );
     });
   });
@@ -172,15 +171,15 @@ describe("View Tool Handlers", () => {
 
       const result = await handleCreateView(
         mockClickUpServiceInstance,
-        args as unknown as Record<string, unknown>
+        args as unknown as Record<string, unknown>,
       );
       expect(mockViewService.createView).toHaveBeenCalledWith(args);
       const summaryMessage = `Successfully created view: ${mockNewView.name}.`;
       expect(result.content[0].text).toContain(summaryMessage);
       const returnedData = JSON.parse(
         result.content[0].text.substring(
-          result.content[0].text.indexOf("Details: ") + 9
-        )
+          result.content[0].text.indexOf("Details: ") + 9,
+        ),
       );
       expect(returnedData).toEqual(mockNewView);
     });
@@ -191,34 +190,34 @@ describe("View Tool Handlers", () => {
           parent_id: "123",
           parent_type: "list",
           type: "list",
-        } as unknown as Record<string, unknown>)
+        } as unknown as Record<string, unknown>),
       ).rejects.toThrow("View name is required.");
       await expect(
         handleCreateView(mockClickUpServiceInstance, {
           parent_id: "123",
           name: "N",
           type: "list",
-        } as unknown as Record<string, unknown>)
+        } as unknown as Record<string, unknown>),
       ).rejects.toThrow(
-        "Parent ID and a valid Parent Type ('team', 'space', 'folder', 'list') are required."
+        "Parent ID and a valid Parent Type ('team', 'space', 'folder', 'list') are required.",
       );
       await expect(
         handleCreateView(mockClickUpServiceInstance, {
           parent_type: "list",
           name: "N",
           type: "list",
-        } as unknown as Record<string, unknown>)
+        } as unknown as Record<string, unknown>),
       ).rejects.toThrow(
-        "Parent ID and a valid Parent Type ('team', 'space', 'folder', 'list') are required."
+        "Parent ID and a valid Parent Type ('team', 'space', 'folder', 'list') are required.",
       );
       await expect(
         handleCreateView(mockClickUpServiceInstance, {
           parent_id: "123",
           parent_type: "list",
           name: "N",
-        } as unknown as Record<string, unknown>)
+        } as unknown as Record<string, unknown>),
       ).rejects.toThrow(
-        "View type ('list', 'board', 'calendar', 'gantt') is required."
+        "View type ('list', 'board', 'calendar', 'gantt') is required.",
       );
     });
   });
@@ -253,8 +252,8 @@ describe("View Tool Handlers", () => {
       expect(result.content[0].text).toContain(summaryMessage);
       const returnedData = JSON.parse(
         result.content[0].text.substring(
-          result.content[0].text.indexOf("Details: ") + 9
-        )
+          result.content[0].text.indexOf("Details: ") + 9,
+        ),
       );
       expect(returnedData).toEqual(mockViewDetailData);
     });
@@ -263,8 +262,8 @@ describe("View Tool Handlers", () => {
       await expect(
         handleGetViewDetails(
           mockClickUpServiceInstance,
-          {} as unknown as Record<string, unknown>
-        )
+          {} as unknown as Record<string, unknown>,
+        ),
       ).rejects.toThrow("View ID is required.");
     });
 
@@ -272,13 +271,13 @@ describe("View Tool Handlers", () => {
       const viewId = "view_error";
       const errorMessage = "Failed to fetch view details";
       mockViewService.getViewDetails.mockRejectedValueOnce(
-        new Error(errorMessage)
+        new Error(errorMessage),
       );
 
       await expect(
         handleGetViewDetails(mockClickUpServiceInstance, {
           view_id: viewId,
-        } as unknown as Record<string, unknown>)
+        } as unknown as Record<string, unknown>),
       ).rejects.toThrow(errorMessage);
     });
   });
@@ -304,7 +303,7 @@ describe("View Tool Handlers", () => {
 
       const result = await handleUpdateView(
         mockClickUpServiceInstance,
-        testArgs as unknown as Record<string, unknown>
+        testArgs as unknown as Record<string, unknown>,
       );
 
       expect(mockViewService.updateView).toHaveBeenCalledWith(testArgs);
@@ -313,8 +312,8 @@ describe("View Tool Handlers", () => {
       expect(result.content[0].text).toContain(summaryMessage);
       const returnedData = JSON.parse(
         result.content[0].text.substring(
-          result.content[0].text.indexOf("Details: ") + 9
-        )
+          result.content[0].text.indexOf("Details: ") + 9,
+        ),
       );
       expect(returnedData).toEqual(mockUpdatedView);
     });
@@ -323,7 +322,7 @@ describe("View Tool Handlers", () => {
       await expect(
         handleUpdateView(mockClickUpServiceInstance, {
           name: "test",
-        } as unknown as Record<string, unknown>)
+        } as unknown as Record<string, unknown>),
       ).rejects.toThrow("View ID is required for update.");
     });
 
@@ -331,9 +330,9 @@ describe("View Tool Handlers", () => {
       await expect(
         handleUpdateView(mockClickUpServiceInstance, {
           view_id: "view_empty_payload",
-        } as unknown as Record<string, unknown>)
+        } as unknown as Record<string, unknown>),
       ).rejects.toThrow(
-        "No fields provided to update the view (at least one updatable field like 'name' is required besides 'view_id')."
+        "No fields provided to update the view (at least one updatable field like 'name' is required besides 'view_id').",
       );
     });
   });
@@ -360,8 +359,8 @@ describe("View Tool Handlers", () => {
       await expect(
         handleDeleteView(
           mockClickUpServiceInstance,
-          {} as unknown as Record<string, unknown>
-        )
+          {} as unknown as Record<string, unknown>,
+        ),
       ).rejects.toThrow("View ID is required for deletion.");
     });
   });
@@ -378,7 +377,7 @@ describe("View Tool Handlers", () => {
 
       const result = await handleGetViewTasks(
         mockClickUpServiceInstance,
-        args as unknown as Record<string, unknown>
+        args as unknown as Record<string, unknown>,
       );
 
       expect(mockViewService.getViewTasks).toHaveBeenCalledWith(args);
@@ -386,8 +385,8 @@ describe("View Tool Handlers", () => {
       expect(result.content[0].text).toContain(summaryMessage);
       const returnedData = JSON.parse(
         result.content[0].text.substring(
-          result.content[0].text.indexOf("Details: ") + 9
-        )
+          result.content[0].text.indexOf("Details: ") + 9,
+        ),
       );
       expect(returnedData).toEqual(mockTasksArray);
     });
@@ -402,7 +401,7 @@ describe("View Tool Handlers", () => {
 
       await handleGetViewTasks(
         mockClickUpServiceInstance,
-        args as unknown as Record<string, unknown>
+        args as unknown as Record<string, unknown>,
       );
 
       expect(mockViewService.getViewTasks).toHaveBeenCalledWith(args);
@@ -412,7 +411,7 @@ describe("View Tool Handlers", () => {
       await expect(
         handleGetViewTasks(mockClickUpServiceInstance, {
           page: 0,
-        } as unknown as Record<string, unknown>)
+        } as unknown as Record<string, unknown>),
       ).rejects.toThrow("View ID is required.");
     });
 
@@ -423,14 +422,14 @@ describe("View Tool Handlers", () => {
         handleGetViewTasks(mockClickUpServiceInstance, {
           view_id: viewId,
           page: "not-a-number",
-        } as unknown as Record<string, unknown>)
+        } as unknown as Record<string, unknown>),
       ).rejects.toThrow("Page parameter must be a non-negative number.");
 
       await expect(
         handleGetViewTasks(mockClickUpServiceInstance, {
           view_id: viewId,
           page: -1,
-        } as unknown as Record<string, unknown>)
+        } as unknown as Record<string, unknown>),
       ).rejects.toThrow("Page parameter must be a non-negative number.");
     });
   });
@@ -441,7 +440,7 @@ describe("View Tool Handlers", () => {
       const { getViewsTool } = await import("../../tools/view.tools.js");
       expect(getViewsTool.name).toBe("clickup_get_views");
       expect(getViewsTool.description).toBe(
-        "Retrieves all Views for a given parent (Team, Space, Folder, or List)."
+        "Retrieves all Views for a given parent (Team, Space, Folder, or List).",
       );
       // expect(getViewsTool.input_schema).toBeDefined(); // Commented out again due to persistent test environment issues
       // expect(getViewsTool.output_schema).toBeDefined(); // Stays commented, as it's not in tool definitions
@@ -451,7 +450,7 @@ describe("View Tool Handlers", () => {
       const { createViewTool } = await import("../../tools/view.tools.js");
       expect(createViewTool.name).toBe("clickup_create_view");
       expect(createViewTool.description).toBe(
-        "Creates a new View within a Team, Space, Folder, or List."
+        "Creates a new View within a Team, Space, Folder, or List.",
       );
       // expect(createViewTool.input_schema).toBeDefined(); // Commented out again
       // expect(createViewTool.output_schema).toBeDefined();
@@ -461,7 +460,7 @@ describe("View Tool Handlers", () => {
       const { getViewDetailsTool } = await import("../../tools/view.tools.js");
       expect(getViewDetailsTool.name).toBe("clickup_get_view_details");
       expect(getViewDetailsTool.description).toBe(
-        "Retrieves details for a specific View."
+        "Retrieves details for a specific View.",
       );
       // expect(getViewDetailsTool.input_schema).toBeDefined(); // Commented out again
       // expect(getViewDetailsTool.output_schema).toBeDefined();
@@ -487,7 +486,7 @@ describe("View Tool Handlers", () => {
       const { getViewTasksTool } = await import("../../tools/view.tools.js");
       expect(getViewTasksTool.name).toBe("clickup_get_view_tasks");
       expect(getViewTasksTool.description).toBe(
-        "Retrieves tasks belonging to a specific View."
+        "Retrieves tasks belonging to a specific View.",
       );
       // expect(getViewTasksTool.input_schema).toBeDefined(); // Commented out again
       // expect(getViewTasksTool.output_schema).toBeDefined();

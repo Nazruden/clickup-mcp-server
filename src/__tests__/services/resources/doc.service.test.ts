@@ -48,7 +48,7 @@ describe("DocService", () => {
 
       expect(mockClient.get).toHaveBeenCalledWith(
         `/api/v3/workspaces/${params.team_id}/docs`,
-        { params: {} }
+        { params: {} },
       );
       expect(result).toEqual(mockDocsData);
     });
@@ -65,7 +65,7 @@ describe("DocService", () => {
 
       expect(mockClient.get).toHaveBeenCalledWith(
         `/api/v3/workspaces/${params.team_id}/docs`,
-        { params: { archived: true } }
+        { params: { archived: true } },
       );
     });
 
@@ -73,7 +73,7 @@ describe("DocService", () => {
       const params: SearchDocsParams = { team_id: "123" };
       mockClient.get.mockRejectedValueOnce(new Error("API Error"));
       await expect(docService.searchDocs(params)).rejects.toThrow(
-        `Failed to search docs in workspace ${params.team_id} from ClickUp (v3 attempt)`
+        `Failed to search docs in workspace ${params.team_id} from ClickUp (v3 attempt)`,
       );
     });
   });
@@ -95,7 +95,7 @@ describe("DocService", () => {
       expect(mockClient.post).toHaveBeenCalledWith(
         `/api/v3/workspaces/${numericWorkspaceId}/docs`,
         { name: params.name },
-        {}
+        {},
       );
       expect(result).toEqual(mockResponseData);
     });
@@ -103,14 +103,14 @@ describe("DocService", () => {
     it("should throw an error if workspace_id is not provided for v3 createDoc", async () => {
       const params = { name: "Invalid Doc" } as any;
       await expect(docService.createDoc(params)).rejects.toThrow(
-        "workspace_id is required for creating a ClickUp Doc (v3)."
+        "workspace_id is required for creating a ClickUp Doc (v3).",
       );
     });
 
     it("should throw an error if workspace_id is not a valid number for v3 createDoc", async () => {
       const params: CreateDocParams = { workspace_id: "abc", name: "Test Doc" };
       await expect(docService.createDoc(params)).rejects.toThrow(
-        `Invalid workspace_id: 'abc' must be a numeric string.`
+        `Invalid workspace_id: 'abc' must be a numeric string.`,
       );
     });
 
@@ -122,7 +122,7 @@ describe("DocService", () => {
       mockClient.post.mockRejectedValueOnce(new Error("API Error"));
       const numericWorkspaceId = parseInt(params.workspace_id, 10);
       await expect(docService.createDoc(params)).rejects.toThrow(
-        `Failed to create doc for workspace ${numericWorkspaceId} from ClickUp (v3 attempt using spec)`
+        `Failed to create doc for workspace ${numericWorkspaceId} from ClickUp (v3 attempt using spec)`,
       );
     });
   });
@@ -145,7 +145,7 @@ describe("DocService", () => {
 
       expect(mockClient.get).toHaveBeenCalledWith(
         `/api/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages`,
-        { params: {} }
+        { params: {} },
       );
       expect(result).toEqual(mockPageData);
     });
@@ -153,7 +153,7 @@ describe("DocService", () => {
     it("should throw an error if workspace_id is not provided for v3 getDocPages", async () => {
       const params = { doc_id: "doc_123" } as any;
       await expect(docService.getDocPages(params)).rejects.toThrow(
-        "workspace_id is required for getting Doc Pages (v3)."
+        "workspace_id is required for getting Doc Pages (v3).",
       );
     });
 
@@ -163,7 +163,7 @@ describe("DocService", () => {
         doc_id: "doc_123",
       };
       await expect(docService.getDocPages(params)).rejects.toThrow(
-        `Invalid workspace_id: 'abc' must be a numeric string.`
+        `Invalid workspace_id: 'abc' must be a numeric string.`,
       );
     });
 
@@ -175,7 +175,7 @@ describe("DocService", () => {
       mockClient.get.mockRejectedValueOnce(new Error("API Error"));
       const numericWorkspaceId = parseInt(params.workspace_id as string, 10);
       await expect(docService.getDocPages(params)).rejects.toThrow(
-        `Failed to retrieve pages for doc ${params.doc_id} (workspace: ${numericWorkspaceId}) from ClickUp (v3 attempt)`
+        `Failed to retrieve pages for doc ${params.doc_id} (workspace: ${numericWorkspaceId}) from ClickUp (v3 attempt)`,
       );
     });
   });
@@ -205,7 +205,7 @@ describe("DocService", () => {
       expect(mockClient.post).toHaveBeenCalledWith(
         `/api/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages`,
         { name: params.name, content: params.content },
-        {}
+        {},
       );
       expect(result).toEqual(mockResponseData);
     });
@@ -213,7 +213,7 @@ describe("DocService", () => {
     it("should throw an error if workspace_id is missing for v3 createDocPage", async () => {
       const params = { doc_id: "doc_123", name: "Error Page" } as any;
       await expect(docService.createDocPage(params)).rejects.toThrow(
-        "workspace_id is required for creating a Doc Page (v3)."
+        "workspace_id is required for creating a Doc Page (v3).",
       );
     });
 
@@ -224,7 +224,7 @@ describe("DocService", () => {
         name: "Test Page",
       };
       await expect(docService.createDocPage(params)).rejects.toThrow(
-        `Invalid workspace_id: 'ws_abc' must be a numeric string for createDocPage.`
+        `Invalid workspace_id: 'ws_abc' must be a numeric string for createDocPage.`,
       );
     });
 
@@ -237,7 +237,7 @@ describe("DocService", () => {
       mockClient.post.mockRejectedValueOnce(new Error("API Error"));
       const numericWorkspaceId = parseInt(params.workspace_id, 10);
       await expect(docService.createDocPage(params)).rejects.toThrow(
-        `Failed to create page in doc ${params.doc_id} (workspace: ${numericWorkspaceId}) in ClickUp (v3 attempt)`
+        `Failed to create page in doc ${params.doc_id} (workspace: ${numericWorkspaceId}) in ClickUp (v3 attempt)`,
       );
     });
   });
@@ -265,7 +265,7 @@ describe("DocService", () => {
 
       expect(mockClient.get).toHaveBeenCalledWith(
         `/api/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages/${params.page_id}`,
-        { params: {} }
+        { params: {} },
       );
       expect(result).toEqual("# Content");
     });
@@ -273,7 +273,7 @@ describe("DocService", () => {
     it("should throw an error if workspace_id is not provided for v3 getDocPageContent", async () => {
       const params = { doc_id: "doc_789", page_id: "page_xyz" } as any;
       await expect(docService.getDocPageContent(params)).rejects.toThrow(
-        "workspace_id is required for getting Doc Page content (v3)."
+        "workspace_id is required for getting Doc Page content (v3).",
       );
     });
 
@@ -284,7 +284,7 @@ describe("DocService", () => {
         page_id: "page_456",
       };
       await expect(docService.getDocPageContent(params)).rejects.toThrow(
-        `Invalid workspace_id: 'ws_abc' must be numeric for getDocPageContent.`
+        `Invalid workspace_id: 'ws_abc' must be numeric for getDocPageContent.`,
       );
     });
 
@@ -309,7 +309,7 @@ describe("DocService", () => {
 
       expect(mockClient.get).toHaveBeenCalledWith(
         `/api/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages/${params.page_id}`,
-        { params: {} }
+        { params: {} },
       );
       expect(result).toEqual("");
     });
@@ -323,7 +323,7 @@ describe("DocService", () => {
       mockClient.get.mockRejectedValueOnce(new Error("API Error"));
       const numericWorkspaceId = parseInt(params.workspace_id as string, 10);
       await expect(docService.getDocPageContent(params)).rejects.toThrow(
-        `Failed to retrieve content for page ${params.page_id} (doc: ${params.doc_id}, ws: ${numericWorkspaceId}) from ClickUp (v3 attempt)`
+        `Failed to retrieve content for page ${params.page_id} (doc: ${params.doc_id}, ws: ${numericWorkspaceId}) from ClickUp (v3 attempt)`,
       );
     });
   });
@@ -354,7 +354,7 @@ describe("DocService", () => {
       expect(mockClient.put).toHaveBeenCalledWith(
         `/api/v3/workspaces/${numericWorkspaceId}/docs/${params.doc_id}/pages/${params.page_id}`,
         { content: params.content, name: params.title },
-        {}
+        {},
       );
       expect(result).toEqual(mockResponseData);
     });
@@ -366,7 +366,7 @@ describe("DocService", () => {
         content: "...",
       } as any;
       await expect(docService.editDocPageContent(params)).rejects.toThrow(
-        "workspace_id is required for editing Doc Page content (v3)."
+        "workspace_id is required for editing Doc Page content (v3).",
       );
     });
 
@@ -378,7 +378,7 @@ describe("DocService", () => {
         content: "...",
       };
       await expect(docService.editDocPageContent(params)).rejects.toThrow(
-        `Invalid workspace_id: 'ws_abc' must be numeric for editDocPageContent.`
+        `Invalid workspace_id: 'ws_abc' must be numeric for editDocPageContent.`,
       );
     });
 
@@ -392,7 +392,7 @@ describe("DocService", () => {
       mockClient.put.mockRejectedValueOnce(new Error("API Error"));
       const numericWorkspaceId = parseInt(params.workspace_id as string, 10);
       await expect(docService.editDocPageContent(params)).rejects.toThrow(
-        `Failed to edit content for page ${params.page_id} (doc: ${params.doc_id}, ws: ${numericWorkspaceId}) in ClickUp (v3 attempt)`
+        `Failed to edit content for page ${params.page_id} (doc: ${params.doc_id}, ws: ${numericWorkspaceId}) in ClickUp (v3 attempt)`,
       );
     });
   });

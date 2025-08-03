@@ -135,7 +135,7 @@ export const getViewTasksTool: Tool = {
 // Handler Functions
 export async function handleGetViews(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as GetViewsParams;
   if (
@@ -144,11 +144,11 @@ export async function handleGetViews(
     !["team", "space", "folder", "list"].includes(params.parent_type)
   ) {
     throw new Error(
-      "Parent ID and a valid Parent Type ('team', 'space', 'folder', 'list') are required."
+      "Parent ID and a valid Parent Type ('team', 'space', 'folder', 'list') are required.",
     );
   }
   logger.info(
-    `Handling tool call: ${getViewsTool.name} for ${params.parent_type} ${params.parent_id}`
+    `Handling tool call: ${getViewsTool.name} for ${params.parent_type} ${params.parent_id}`,
   );
   const views = await clickUpService.viewService.getViews(params);
   return {
@@ -163,7 +163,7 @@ export async function handleGetViews(
 
 export async function handleCreateView(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as CreateViewParams;
   if (
@@ -172,7 +172,7 @@ export async function handleCreateView(
     !["team", "space", "folder", "list"].includes(params.parent_type)
   ) {
     throw new Error(
-      "Parent ID and a valid Parent Type ('team', 'space', 'folder', 'list') are required."
+      "Parent ID and a valid Parent Type ('team', 'space', 'folder', 'list') are required.",
     );
   }
   if (!params.name || typeof params.name !== "string") {
@@ -183,11 +183,11 @@ export async function handleCreateView(
     !["list", "board", "calendar", "gantt"].includes(params.type)
   ) {
     throw new Error(
-      "View type ('list', 'board', 'calendar', 'gantt') is required."
+      "View type ('list', 'board', 'calendar', 'gantt') is required.",
     );
   }
   logger.info(
-    `Handling tool call: ${createViewTool.name} for ${params.parent_type} ${params.parent_id}`
+    `Handling tool call: ${createViewTool.name} for ${params.parent_type} ${params.parent_id}`,
   );
   const newView = await clickUpService.viewService.createView(params);
   return {
@@ -202,17 +202,17 @@ export async function handleCreateView(
 
 export async function handleGetViewDetails(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as GetViewDetailsParams;
   if (!params.view_id || typeof params.view_id !== "string") {
     throw new Error("View ID is required.");
   }
   logger.info(
-    `Handling tool call: ${getViewDetailsTool.name} for view ${params.view_id}`
+    `Handling tool call: ${getViewDetailsTool.name} for view ${params.view_id}`,
   );
   const viewDetails = await clickUpService.viewService.getViewDetails(
-    params.view_id
+    params.view_id,
   );
   return {
     content: [
@@ -226,7 +226,7 @@ export async function handleGetViewDetails(
 
 export async function handleUpdateView(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as UpdateViewParams;
   if (!params.view_id || typeof params.view_id !== "string") {
@@ -239,12 +239,12 @@ export async function handleUpdateView(
 
   if (Object.keys(updateFields).length === 0) {
     throw new Error(
-      "No fields provided to update the view (at least one updatable field like 'name' is required besides 'view_id')."
+      "No fields provided to update the view (at least one updatable field like 'name' is required besides 'view_id').",
     );
   }
 
   logger.info(
-    `Handling tool call: ${updateViewTool.name} for view ${params.view_id}`
+    `Handling tool call: ${updateViewTool.name} for view ${params.view_id}`,
   );
   // ViewService.updateView expects the full UpdateViewParams object as a single argument
   const updatedView = await clickUpService.viewService.updateView(params);
@@ -260,14 +260,14 @@ export async function handleUpdateView(
 
 export async function handleDeleteView(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as DeleteViewParams;
   if (!params.view_id || typeof params.view_id !== "string") {
     throw new Error("View ID is required for deletion.");
   }
   logger.info(
-    `Handling tool call: ${deleteViewTool.name} for view ${params.view_id}`
+    `Handling tool call: ${deleteViewTool.name} for view ${params.view_id}`,
   );
   await clickUpService.viewService.deleteView(params.view_id);
   return {
@@ -282,7 +282,7 @@ export async function handleDeleteView(
 
 export async function handleGetViewTasks(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as GetViewTasksParams;
   if (!params.view_id || typeof params.view_id !== "string") {
@@ -299,7 +299,7 @@ export async function handleGetViewTasks(
   }
 
   logger.info(
-    `Handling tool call: ${getViewTasksTool.name} for view ${params.view_id}, page: ${params.page}`
+    `Handling tool call: ${getViewTasksTool.name} for view ${params.view_id}, page: ${params.page}`,
   );
   const serviceResponse = await clickUpService.viewService.getViewTasks(params);
   const tasks = serviceResponse.tasks;

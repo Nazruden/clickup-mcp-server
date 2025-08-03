@@ -40,7 +40,7 @@ interface CreateBoardArgs {
 // Handler Function
 export async function handleCreateBoard(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as CreateBoardArgs;
   // Validate required parameters
@@ -52,7 +52,7 @@ export async function handleCreateBoard(
   }
 
   logger.info(
-    `Handling tool call: ${createBoardTool.name} for space ${params.space_id}`
+    `Handling tool call: ${createBoardTool.name} for space ${params.space_id}`,
   );
   try {
     // Correct implementation: Call createView with type 'board'

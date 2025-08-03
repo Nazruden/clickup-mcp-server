@@ -173,7 +173,7 @@ async function main() {
         name: "ClickUp MCP Server",
         version: "1.0.0",
       },
-      serverOptions
+      serverOptions,
     );
 
     // Handle ListTools request
@@ -183,7 +183,7 @@ async function main() {
       // and values are the actual Tool definition objects.
       // Object.values() will give an array of these Tool definition objects.
       const toolDefinitions: Tool[] = Object.values(
-        serverOptions.capabilities.tools
+        serverOptions.capabilities.tools,
       );
       return { tools: toolDefinitions };
     });
@@ -228,7 +228,7 @@ async function main() {
             case removeTaskCustomFieldValueTool.name:
               return await handleRemoveTaskCustomFieldValue(
                 clickUpService,
-                args
+                args,
               );
             case searchDocsTool.name:
               return await handleSearchDocs(clickUpService, args);
@@ -278,14 +278,14 @@ async function main() {
             content: [{ type: "text", text: `Error: ${errorMessage}` }],
           };
         }
-      }
+      },
     );
 
     // Explicitly create and connect the Stdio transport
     const transport = new StdioServerTransport();
     server.connect(transport);
     logger.info(
-      "ClickUp MCP Server started successfully and listening via Stdio."
+      "ClickUp MCP Server started successfully and listening via Stdio.",
     );
   } catch (error) {
     logger.error("Failed to start ClickUp MCP Server:", error);

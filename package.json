@@ -22,7 +22,6 @@
     "type-check": "tsc --noEmit",
     "prepare": "npm run build",
     "prepublishOnly": "npm run test && npm run build",
-    "postinstall": "node bin/postinstall.js",
     "config:set": "node bin/config-env.js set",
     "config:get": "node bin/config-env.js get",
     "config:list": "node bin/config-env.js list",

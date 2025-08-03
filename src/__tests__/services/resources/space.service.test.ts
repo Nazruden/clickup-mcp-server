@@ -52,7 +52,7 @@ describe("SpaceService", () => {
 
       expect(mockClient.get).toHaveBeenCalledWith(
         `/team/${params.team_id}/space`,
-        { params: { archived: "false" } }
+        { params: { archived: "false" } },
       );
       expect(result).toEqual(mockResponse.data); // Service returns { spaces: [...] }
     });
@@ -66,7 +66,7 @@ describe("SpaceService", () => {
 
       expect(mockClient.get).toHaveBeenCalledWith(
         `/team/${params.team_id}/space`,
-        { params: { archived: "true" } }
+        { params: { archived: "true" } },
       );
     });
 
@@ -74,7 +74,7 @@ describe("SpaceService", () => {
       const params: GetSpacesParams = { team_id: "team_123" };
       mockClient.get.mockRejectedValueOnce(new Error("API Error"));
       await expect(spaceService.getSpaces(params)).rejects.toThrow(
-        "Failed to retrieve spaces from ClickUp"
+        "Failed to retrieve spaces from ClickUp",
       );
     });
   });
@@ -102,7 +102,7 @@ describe("SpaceService", () => {
 
       expect(mockClient.post).toHaveBeenCalledWith(
         `/team/${team_id}/space`,
-        bodyParams
+        bodyParams,
       );
       expect(result).toEqual(mockResponse.data);
     });
@@ -114,7 +114,7 @@ describe("SpaceService", () => {
       };
       mockClient.post.mockRejectedValueOnce(new Error("API Error"));
       await expect(spaceService.createSpace(params)).rejects.toThrow(
-        "Failed to create space in ClickUp"
+        "Failed to create space in ClickUp",
       );
     });
   });
@@ -143,7 +143,7 @@ describe("SpaceService", () => {
       const spaceId = "space_abc";
       mockClient.get.mockRejectedValueOnce(new Error("API Error"));
       await expect(spaceService.getSpace(spaceId)).rejects.toThrow(
-        "Failed to retrieve space from ClickUp"
+        "Failed to retrieve space from ClickUp",
       );
     });
   });
@@ -171,7 +171,7 @@ describe("SpaceService", () => {
 
       expect(mockClient.put).toHaveBeenCalledWith(
         `/space/${space_id}`,
-        bodyParams
+        bodyParams,
       );
       expect(result).toEqual(mockResponse.data);
     });
@@ -183,7 +183,7 @@ describe("SpaceService", () => {
       };
       mockClient.put.mockRejectedValueOnce(new Error("API Error"));
       await expect(spaceService.updateSpace(params)).rejects.toThrow(
-        "Failed to update space in ClickUp"
+        "Failed to update space in ClickUp",
       );
     });
   });
@@ -205,7 +205,7 @@ describe("SpaceService", () => {
       const spaceId = "space_todelete";
       mockClient.delete.mockRejectedValueOnce(new Error("API Error"));
       await expect(spaceService.deleteSpace(spaceId)).rejects.toThrow(
-        "Failed to delete space in ClickUp"
+        "Failed to delete space in ClickUp",
       );
     });
   });

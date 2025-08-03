@@ -74,7 +74,7 @@ describe("ViewService", () => {
 
       expect(mockClient.get).toHaveBeenCalledWith(
         `/${params.parent_type}/${params.parent_id}/view`,
-        {}
+        {},
       );
       expect(result).toEqual(mockViewsData);
     });
@@ -112,7 +112,7 @@ describe("ViewService", () => {
       await viewService.getViews(params);
       expect(mockClient.get).toHaveBeenCalledWith(
         "/folder/folder_789/view",
-        {}
+        {},
       );
     });
 
@@ -134,7 +134,7 @@ describe("ViewService", () => {
       };
       mockClient.get.mockRejectedValueOnce(new Error("API Error"));
       await expect(viewService.getViews(params)).rejects.toThrow(
-        `Failed to retrieve views for ${params.parent_type} ${params.parent_id} from ClickUp`
+        `Failed to retrieve views for ${params.parent_type} ${params.parent_id} from ClickUp`,
       );
     });
 
@@ -144,7 +144,7 @@ describe("ViewService", () => {
         parent_type: "invalid_type",
       } as any as GetViewsParams;
       await expect(viewService.getViews(params)).rejects.toThrow(
-        "Invalid view parent type: invalid_type"
+        "Invalid view parent type: invalid_type",
       );
     });
   });
@@ -176,7 +176,7 @@ describe("ViewService", () => {
 
       expect(mockClient.post).toHaveBeenCalledWith(
         `/${parent_type}/${parent_id}/view`,
-        bodyParams
+        bodyParams,
       );
       expect(result).toEqual(mockResponseData);
     });
@@ -207,7 +207,7 @@ describe("ViewService", () => {
       await viewService.createView(params);
       expect(mockClient.post).toHaveBeenCalledWith(
         "/space/space_456/view",
-        bodyParams
+        bodyParams,
       );
     });
 
@@ -220,7 +220,7 @@ describe("ViewService", () => {
       };
       mockClient.post.mockRejectedValueOnce(new Error("API Error"));
       await expect(viewService.createView(params)).rejects.toThrow(
-        `Failed to create view for ${params.parent_type} ${params.parent_id} in ClickUp`
+        `Failed to create view for ${params.parent_type} ${params.parent_id} in ClickUp`,
       );
     });
   });
@@ -252,7 +252,7 @@ describe("ViewService", () => {
       const viewId = "view_xyz";
       mockClient.get.mockRejectedValueOnce(new Error("API Error"));
       await expect(viewService.getViewDetails(viewId)).rejects.toThrow(
-        `Failed to retrieve view ${viewId} from ClickUp`
+        `Failed to retrieve view ${viewId} from ClickUp`,
       );
     });
   });
@@ -284,7 +284,7 @@ describe("ViewService", () => {
 
       expect(mockClient.put).toHaveBeenCalledWith(
         `/view/${view_id}`,
-        bodyParams
+        bodyParams,
       );
       expect(result).toEqual(mockResponseData);
     });
@@ -296,7 +296,7 @@ describe("ViewService", () => {
       };
       mockClient.put.mockRejectedValueOnce(new Error("API Error"));
       await expect(viewService.updateView(params)).rejects.toThrow(
-        `Failed to update view ${params.view_id} in ClickUp`
+        `Failed to update view ${params.view_id} in ClickUp`,
       );
     });
   });
@@ -318,7 +318,7 @@ describe("ViewService", () => {
       const viewId = "view_todelete";
       mockClient.delete.mockRejectedValueOnce(new Error("API Error"));
       await expect(viewService.deleteView(viewId)).rejects.toThrow(
-        `Failed to delete view ${viewId} in ClickUp`
+        `Failed to delete view ${viewId} in ClickUp`,
       );
     });
   });
@@ -338,7 +338,7 @@ describe("ViewService", () => {
 
       expect(mockClient.get).toHaveBeenCalledWith(
         `/view/${params.view_id}/task`,
-        { params: { page: params.page } }
+        { params: { page: params.page } },
       );
       expect(result).toEqual(mockTasksData);
     });
@@ -352,7 +352,7 @@ describe("ViewService", () => {
       const result = await viewService.getViewTasks(params);
       expect(mockClient.get).toHaveBeenCalledWith(
         `/view/${params.view_id}/task`,
-        { params: {} } // page is undefined, so queryParams will be empty
+        { params: {} }, // page is undefined, so queryParams will be empty
       );
       expect(result.tasks).toEqual([]);
       expect(result.last_page).toBe(true);
@@ -362,7 +362,7 @@ describe("ViewService", () => {
       const params: GetViewTasksParams = { view_id: "view_tasks_err" };
       mockClient.get.mockRejectedValueOnce(new Error("API Error"));
       await expect(viewService.getViewTasks(params)).rejects.toThrow(
-        `Failed to retrieve tasks for view ${params.view_id} from ClickUp`
+        `Failed to retrieve tasks for view ${params.view_id} from ClickUp`,
       );
     });
   });

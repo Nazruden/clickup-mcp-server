@@ -14,7 +14,7 @@ export class ListService {
 
     if (!parent_id) {
       throw new Error(
-        `Parent ID (folder_id or space_id) is required to create a list.`
+        `Parent ID (folder_id or space_id) is required to create a list.`,
       );
     }
     if (!name) {
@@ -40,13 +40,13 @@ export class ListService {
     if (body.status) requestBody.status = body.status; // This sets the default status for tasks in the list
 
     logger.debug(
-      `Creating list in ${parent_type} ${parent_id} with name: "${name}" via ${apiUrl}`
+      `Creating list in ${parent_type} ${parent_id} with name: "${name}" via ${apiUrl}`,
     );
 
     try {
       const response = await this.client.post<ClickUpListFull>(
         apiUrl,
-        requestBody
+        requestBody,
       );
       return response.data;
     } catch (error) {
@@ -59,11 +59,11 @@ export class ListService {
             data: error.response?.data,
             url: apiUrl,
             body: requestBody,
-          }
+          },
         );
       } else if (error instanceof Error) {
         logger.error(
-          `Generic error creating list for ${scope}: ${error.message}`
+          `Generic error creating list for ${scope}: ${error.message}`,
         );
       }
       throw new Error(`Failed to create list for ${scope} from ClickUp`);

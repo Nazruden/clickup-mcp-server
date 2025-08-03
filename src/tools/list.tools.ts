@@ -84,14 +84,14 @@ interface GetListsArgs {
 // Handler Function
 export async function handleGetLists(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as GetListsArgs;
   if (!params.folder_id || typeof params.folder_id !== "string") {
     throw new Error("Folder ID is required and must be a string.");
   }
   logger.info(
-    `Handling tool call: ${getListsTool.name} for folder ${params.folder_id}`
+    `Handling tool call: ${getListsTool.name} for folder ${params.folder_id}`,
   );
   try {
     // Assume getLists returns ClickUpList[] directly
@@ -112,7 +112,7 @@ export async function handleGetLists(
 
 export async function handleCreateList(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ): Promise<{ content: Array<{ type: string; text: string }> }> {
   const params = args as unknown as CreateListParams;
 
@@ -130,7 +130,7 @@ export async function handleCreateList(
   }
 
   logger.info(
-    `Handling tool call: ${createListTool.name} for ${params.parent_type} ${params.parent_id} with name ${params.name}`
+    `Handling tool call: ${createListTool.name} for ${params.parent_type} ${params.parent_id} with name ${params.name}`,
   );
 
   try {

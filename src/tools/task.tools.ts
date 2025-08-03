@@ -120,7 +120,7 @@ interface CreateTaskToolArgs {
 
 export async function handleCreateTask(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const toolArgs = args as CreateTaskToolArgs; // Cast to our defined interface
 
@@ -133,7 +133,7 @@ export async function handleCreateTask(
   }
 
   logger.info(
-    `Handling tool call: ${createTaskTool.name} for list ${toolArgs.list_id}`
+    `Handling tool call: ${createTaskTool.name} for list ${toolArgs.list_id}`,
   );
 
   // Construct the payload for ClickUpService, performing necessary transformations
@@ -185,7 +185,7 @@ interface UpdateTaskToolArgs {
 
 export async function handleUpdateTask(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const toolArgs = args as UpdateTaskToolArgs; // Cast to our defined interface
 
@@ -218,7 +218,7 @@ export async function handleUpdateTask(
   }
   if (updateDataFromToolArgs.time_estimate !== undefined) {
     servicePayloadUpdate.time_estimate = String(
-      updateDataFromToolArgs.time_estimate
+      updateDataFromToolArgs.time_estimate,
     );
   }
 
@@ -230,7 +230,7 @@ export async function handleUpdateTask(
   logger.info(`Handling tool call: ${updateTaskTool.name} for task ${task_id}`);
   const response = await clickUpService.taskService.updateTask(
     task_id,
-    servicePayloadUpdate
+    servicePayloadUpdate,
   );
   return {
     content: [

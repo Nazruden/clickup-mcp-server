@@ -44,7 +44,7 @@ describe("TaskService", () => {
       expect(mockClient.post).toHaveBeenCalledWith(
         `/list/${taskData.list_id}/task`,
         taskData,
-        {}
+        {},
       );
       expect(result).toEqual(mockResponse.data);
     });
@@ -52,7 +52,7 @@ describe("TaskService", () => {
     it("should throw error if list_id is missing", async () => {
       const taskData = { name: "Task without list" } as ClickUpTask; // Missing list_id
       await expect(taskService.createTask(taskData)).rejects.toThrow(
-        "list_id is required to create a task."
+        "list_id is required to create a task.",
       );
       expect(mockClient.post).not.toHaveBeenCalled();
     });
@@ -64,7 +64,7 @@ describe("TaskService", () => {
 
       // Act & Assert
       await expect(taskService.createTask(taskData)).rejects.toThrow(
-        "Failed to create task in ClickUp"
+        "Failed to create task in ClickUp",
       );
     });
   });
@@ -85,7 +85,7 @@ describe("TaskService", () => {
       expect(mockClient.put).toHaveBeenCalledWith(
         `/task/${taskId}`,
         updates,
-        {}
+        {},
       );
       expect(result).toEqual(mockResponse.data);
     });
@@ -95,12 +95,12 @@ describe("TaskService", () => {
       const taskId = "task_xyz";
       const updates = { name: "Updated Task Name" };
       mockClient.put.mockRejectedValueOnce(
-        new Error("ClickUp API Update Error")
+        new Error("ClickUp API Update Error"),
       );
 
       // Act & Assert
       await expect(taskService.updateTask(taskId, updates)).rejects.toThrow(
-        "Failed to update task in ClickUp"
+        "Failed to update task in ClickUp",
       );
     });
   });

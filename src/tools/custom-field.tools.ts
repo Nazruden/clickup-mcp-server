@@ -83,14 +83,14 @@ export const removeTaskCustomFieldValueTool: Tool = {
 // Handler Functions
 export async function handleGetCustomFields(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as GetCustomFieldsParams;
   if (!params.list_id || typeof params.list_id !== "string") {
     throw new Error("List ID is required.");
   }
   logger.info(
-    `Handling tool call: ${getCustomFieldsTool.name} for list_id: ${params.list_id}`
+    `Handling tool call: ${getCustomFieldsTool.name} for list_id: ${params.list_id}`,
   );
   const customFields: ClickUpCustomField[] =
     await clickUpService.customFieldService.getCustomFields(params.list_id);
@@ -106,7 +106,7 @@ export async function handleGetCustomFields(
 
 export async function handleSetTaskCustomFieldValue(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as SetTaskCustomFieldValueParams;
   if (!params.task_id || typeof params.task_id !== "string") {
@@ -120,7 +120,7 @@ export async function handleSetTaskCustomFieldValue(
     throw new Error("Value is required to set a custom field.");
   }
   logger.info(
-    `Handling tool call: ${setTaskCustomFieldValueTool.name} for task_id: ${params.task_id}, field_id: ${params.field_id}`
+    `Handling tool call: ${setTaskCustomFieldValueTool.name} for task_id: ${params.task_id}, field_id: ${params.field_id}`,
   );
   await clickUpService.customFieldService.setTaskCustomFieldValue(params);
   return {
@@ -135,7 +135,7 @@ export async function handleSetTaskCustomFieldValue(
 
 export async function handleRemoveTaskCustomFieldValue(
   clickUpService: ClickUpService,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ) {
   const params = args as unknown as RemoveTaskCustomFieldValueParams;
   if (!params.task_id || typeof params.task_id !== "string") {
@@ -145,7 +145,7 @@ export async function handleRemoveTaskCustomFieldValue(
     throw new Error("Field ID is required.");
   }
   logger.info(
-    `Handling tool call: ${removeTaskCustomFieldValueTool.name} for task_id: ${params.task_id}, field_id: ${params.field_id}`
+    `Handling tool call: ${removeTaskCustomFieldValueTool.name} for task_id: ${params.task_id}, field_id: ${params.field_id}`,
   );
   await clickUpService.customFieldService.removeTaskCustomFieldValue(params);
   return {

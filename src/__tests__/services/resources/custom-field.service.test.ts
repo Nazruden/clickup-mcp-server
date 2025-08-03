@@ -66,7 +66,7 @@ describe("CustomFieldService", () => {
       const listId = "list_abc";
       mockClient.get.mockRejectedValueOnce(new Error("API Error"));
       await expect(customFieldService.getCustomFields(listId)).rejects.toThrow(
-        `Failed to retrieve custom fields for list ${listId} from ClickUp`
+        `Failed to retrieve custom fields for list ${listId} from ClickUp`,
       );
     });
   });
@@ -89,7 +89,7 @@ describe("CustomFieldService", () => {
       expect(mockClient.post).toHaveBeenCalledWith(
         `/task/${params.task_id}/field/${params.field_id}`,
         expectedBody,
-        {}
+        {},
       );
       expect(result).toEqual(mockResponseData);
     });
@@ -114,7 +114,7 @@ describe("CustomFieldService", () => {
       expect(mockClient.post).toHaveBeenCalledWith(
         `/task/${params.task_id}/field/${params.field_id}`,
         expectedBody,
-        {}
+        {},
       );
     });
 
@@ -126,9 +126,9 @@ describe("CustomFieldService", () => {
       };
       mockClient.post.mockRejectedValueOnce(new Error("API Error"));
       await expect(
-        customFieldService.setTaskCustomFieldValue(params)
+        customFieldService.setTaskCustomFieldValue(params),
       ).rejects.toThrow(
-        `Failed to set custom field ${params.field_id} for task ${params.task_id} in ClickUp`
+        `Failed to set custom field ${params.field_id} for task ${params.task_id} in ClickUp`,
       );
     });
   });
@@ -149,7 +149,7 @@ describe("CustomFieldService", () => {
 
       expect(mockClient.delete).toHaveBeenCalledWith(
         `/task/${params.task_id}/field/${params.field_id}`,
-        {}
+        {},
       );
       expect(result).toEqual(mockResponseData);
     });
@@ -161,9 +161,9 @@ describe("CustomFieldService", () => {
       };
       mockClient.delete.mockRejectedValueOnce(new Error("API Error"));
       await expect(
-        customFieldService.removeTaskCustomFieldValue(params)
+        customFieldService.removeTaskCustomFieldValue(params),
       ).rejects.toThrow(
-        `Failed to remove custom field ${params.field_id} for task ${params.task_id} from ClickUp`
+        `Failed to remove custom field ${params.field_id} for task ${params.task_id} from ClickUp`,
       );
     });
   });
