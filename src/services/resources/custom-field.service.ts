@@ -19,7 +19,7 @@ export class CustomFieldService {
     logger.debug(`Fetching custom fields for list ID: ${listId}`);
     try {
       const response = await this.client.get<{ fields: ClickUpCustomField[] }>(
-        `/list/${listId}/field`,
+        `/v2/list/${listId}/field`,
         {},
       );
       return response.data.fields;
@@ -61,7 +61,7 @@ export class CustomFieldService {
 
     try {
       const response = await this.client.post<ClickUpSuccessResponse>(
-        `/task/${task_id}/field/${field_id}`,
+        `/v2/task/${task_id}/field/${field_id}`,
         requestBody,
         {},
       );
@@ -95,7 +95,7 @@ export class CustomFieldService {
 
     try {
       const response = await this.client.delete<ClickUpSuccessResponse>(
-        `/task/${task_id}/field/${field_id}`,
+        `/v2/task/${task_id}/field/${field_id}`,
         {},
       );
       return response.data;

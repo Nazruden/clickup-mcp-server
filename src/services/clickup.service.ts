@@ -190,16 +190,20 @@ export class ClickUpService {
   // Remove updateTask method (delegated)
   // async updateTask(...) : Promise<ClickUpTask> { ... }
 
-  // Remove userId parameter
-  async getTeams(): Promise<ClickUpTeam[]> {
-    // Corrected return type based on API v2
+  // Get current user info which includes workspace information
+    async getTeams(): Promise<ClickUpTeam[]> {
     try {
-      // Interceptor will add auth header
-      const response = await this.client.get("/api/v2/team", {});
-      // API v2 returns { teams: [...] }
+      // Use the correct endpoint to get workspaces/teams
+      const response = await this.client.get("/v2/team", {});
+
+      // Return teams directly from response
+      if (!response.data || !response.data.teams) {
+        logger.warn("No teams found in response");
+        return [];
+      }
+
       return response.data.teams;
     } catch (error) {
-      // ... existing error handling ...
       if (error instanceof Error) {
         logger.error(`Failed to get teams: ${error.message}`);
       }
@@ -212,7 +216,7 @@ export class ClickUpService {
     try {
       // Interceptor will add auth header
       const response = await this.client.get(
-        `/api/v2/folder/${folderId}/list`,
+        `/v2/folder/${folderId}/list`,
         {},
       );
       return response.data.lists;
@@ -231,7 +235,7 @@ export class ClickUpService {
       // Interceptor will add auth header
       const response = await this.client.post(
         // Ensure space_id is present
-        `/api/v2/space/${boardData.space_id}/board`,
+        `/v2/space/${boardData.space_id}/board`,
         boardData,
         {},
       );

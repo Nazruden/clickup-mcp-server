@@ -23,7 +23,19 @@ export const getListsTool: Tool = {
   },
   outputSchema: {
     type: "object",
-    description: "A JSON string representing an array of list objects.",
+    properties: {
+      lists: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            name: { type: "string" }
+          }
+        }
+      }
+    },
+    description: "An object containing an array of list objects in the 'lists' property.",
   },
 };
 
@@ -85,7 +97,7 @@ interface GetListsArgs {
 export async function handleGetLists(
   clickUpService: ClickUpService,
   args: Record<string, unknown>,
-) {
+): Promise<any> {
   const params = args as unknown as GetListsArgs;
   if (!params.folder_id || typeof params.folder_id !== "string") {
     throw new Error("Folder ID is required and must be a string.");
@@ -103,6 +115,8 @@ export async function handleGetLists(
           text: JSON.stringify(lists, null, 2),
         },
       ],
+      // AJOUT: structuredContent requis par MCP quand outputSchema est défini
+      structuredContent: { lists },
     };
   } catch (error) {
     logger.error(`Error in ${getListsTool.name}:`, error);
@@ -113,7 +127,7 @@ export async function handleGetLists(
 export async function handleCreateList(
   clickUpService: ClickUpService,
   args: Record<string, unknown>,
-): Promise<{ content: Array<{ type: string; text: string }> }> {
+): Promise<any> {
   const params = args as unknown as CreateListParams;
 
   if (!params.parent_id || typeof params.parent_id !== "string") {
@@ -142,6 +156,8 @@ export async function handleCreateList(
           text: `Successfully created list: ${newList.name} (ID: ${newList.id}). Details: ${JSON.stringify(newList, null, 2)}`,
         },
       ],
+      // AJOUT: structuredContent requis par MCP quand outputSchema est défini
+      structuredContent: newList,
     };
   } catch (error) {
     logger.error(`Error in ${createListTool.name} handler:`, error);

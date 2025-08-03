@@ -25,7 +25,7 @@ export class FolderService {
         queryParams.archived = params.archived.toString();
       }
       const response = await this.client.get(
-        `/space/${params.space_id}/folder`,
+        `/v2/space/${params.space_id}/folder`,
         { params: queryParams },
       );
       // API v2 for Get Folders returns { folders: [...] }
@@ -56,7 +56,7 @@ export class FolderService {
     try {
       const { space_id, ...bodyParams } = params;
       const response = await this.client.post<ClickUpFolder>(
-        `/space/${space_id}/folder`,
+        `/v2/space/${space_id}/folder`,
         bodyParams,
       );
       return response.data;
@@ -83,7 +83,7 @@ export class FolderService {
     logger.debug(`Fetching folder ID: ${folder_id}`);
     try {
       const response = await this.client.get<ClickUpFolder>(
-        `/folder/${folder_id}`,
+        `/v2/folder/${folder_id}`,
       );
       return response.data;
     } catch (error) {
@@ -110,7 +110,7 @@ export class FolderService {
     logger.debug(`Updating folder ID: ${folder_id}`);
     try {
       const response = await this.client.put<ClickUpFolder>(
-        `/folder/${folder_id}`,
+        `/v2/folder/${folder_id}`,
         bodyParams,
       );
       return response.data;
@@ -137,7 +137,7 @@ export class FolderService {
     logger.debug(`Deleting folder ID: ${folder_id}`);
     try {
       const response = await this.client.delete<ClickUpSuccessResponse>(
-        `/folder/${folder_id}`,
+        `/v2/folder/${folder_id}`,
       );
       return response.data;
     } catch (error) {

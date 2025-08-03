@@ -50,7 +50,7 @@ export class ViewService {
 
     try {
       const response = await this.client.get<{ views: ClickUpView[] }>(
-        `/${pathSegment}/${parent_id}/view`,
+        `/v2/${pathSegment}/${parent_id}/view`,
         {},
       );
       return response.data.views;
@@ -83,7 +83,7 @@ export class ViewService {
     );
     try {
       const response = await this.client.post<ClickUpView>(
-        `/${pathSegment}/${parent_id}/view`,
+        `/v2/${pathSegment}/${parent_id}/view`,
         bodyParams, // Contains name, type, settings, etc.
       );
       return response.data;
@@ -111,7 +111,7 @@ export class ViewService {
   async getViewDetails(view_id: string): Promise<ClickUpView> {
     logger.debug(`Fetching details for view ID: ${view_id}`);
     try {
-      const response = await this.client.get<ClickUpView>(`/view/${view_id}`);
+      const response = await this.client.get<ClickUpView>(`/v2/view/${view_id}`);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -134,7 +134,7 @@ export class ViewService {
     logger.debug(`Updating view ID: ${view_id}`);
     try {
       const response = await this.client.put<ClickUpView>(
-        `/view/${view_id}`,
+        `/v2/view/${view_id}`,
         bodyParams,
       );
       return response.data;
@@ -158,7 +158,7 @@ export class ViewService {
     logger.debug(`Deleting view ID: ${view_id}`);
     try {
       const response = await this.client.delete<ClickUpSuccessResponse>(
-        `/view/${view_id}`,
+        `/v2/view/${view_id}`,
       );
       return response.data;
     } catch (error) {
@@ -189,7 +189,7 @@ export class ViewService {
 
     try {
       const response = await this.client.get<GetViewTasksResponse>(
-        `/view/${view_id}/task`,
+        `/v2/view/${view_id}/task`,
         { params: queryParams },
       );
       return response.data;

@@ -12,15 +12,20 @@ export const getTeamsTool: Tool = {
     properties: {}, // No input arguments needed
   },
   outputSchema: {
-    // The 'text' field in the response content will be a JSON string representing an array of team objects.
-    // While the MCP content type is 'text', this describes the structure of the stringified JSON.
     type: "object",
-    description:
-      "A JSON string representing an array of team objects. Each object should have at least 'id' and 'name'.",
-    // It's also common to have no outputSchema or a very generic one when the content type is 'text'
-    // and the actual structure is implicitly defined by the description.
-    // For example:
-    // description: "A JSON string representing an array of team objects."
+    properties: {
+      teams: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            name: { type: "string" }
+          }
+        }
+      }
+    },
+    description: "An object containing an array of team objects in the 'teams' property."
   },
 };
 
@@ -28,7 +33,7 @@ export const getTeamsTool: Tool = {
 export async function handleGetTeams(
   clickUpService: ClickUpService,
   args: Record<string, unknown>, // Args likely unused but kept for consistent signature
-) {
+): Promise<any> {
   logger.info(`Handling tool call: ${getTeamsTool.name}`);
   try {
     const teams = await clickUpService.getTeams();
@@ -39,16 +44,11 @@ export async function handleGetTeams(
           text: JSON.stringify(teams, null, 2), // Stringify the JSON data
         },
       ],
+      // AJOUT: structuredContent requis par MCP quand outputSchema est défini
+      structuredContent: { teams },
     };
   } catch (error) {
     logger.error(`Error in ${getTeamsTool.name}:`, error);
-    // The main error handler in src/index.ts should format this into the MCP error structure.
-    // For direct error shaping here, it would be:
-    // return {
-    //   isError: true,
-    //   content: [{ type: "text", text: error instanceof Error ? error.message : "Failed to get teams" }]
-    // };
-    // But typically, throwing the error is preferred to let the central handler manage it.
     throw error instanceof Error ? error : new Error("Failed to get teams");
   }
 }

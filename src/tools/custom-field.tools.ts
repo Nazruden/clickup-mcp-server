@@ -22,6 +22,23 @@ export const getCustomFieldsTool: Tool = {
     },
     required: ["list_id"],
   },
+  outputSchema: {
+    type: "object",
+    properties: {
+      fields: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            name: { type: "string" },
+            type: { type: "string" }
+          }
+        }
+      }
+    },
+    description: "An object containing an array of custom field objects in the 'fields' property.",
+  },
 };
 
 export const setTaskCustomFieldValueTool: Tool = {
@@ -59,6 +76,13 @@ export const setTaskCustomFieldValueTool: Tool = {
     },
     required: ["task_id", "field_id", "value"],
   },
+  outputSchema: {
+    type: "object",
+    properties: {
+      success: { type: "boolean" }
+    },
+    description: "An object indicating whether the custom field value was set successfully.",
+  },
 };
 
 export const removeTaskCustomFieldValueTool: Tool = {
@@ -78,6 +102,13 @@ export const removeTaskCustomFieldValueTool: Tool = {
     },
     required: ["task_id", "field_id"],
   },
+  outputSchema: {
+    type: "object",
+    properties: {
+      success: { type: "boolean" }
+    },
+    description: "An object indicating whether the custom field value was removed successfully.",
+  },
 };
 
 // Handler Functions
@@ -92,16 +123,22 @@ export async function handleGetCustomFields(
   logger.info(
     `Handling tool call: ${getCustomFieldsTool.name} for list_id: ${params.list_id}`,
   );
-  const customFields: ClickUpCustomField[] =
-    await clickUpService.customFieldService.getCustomFields(params.list_id);
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(customFields, null, 2),
-      },
-    ],
-  };
+  try {
+    const customFields: ClickUpCustomField[] =
+      await clickUpService.customFieldService.getCustomFields(params.list_id);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(customFields, null, 2),
+        },
+      ],
+      structuredContent: { fields: customFields },
+    };
+  } catch (error) {
+    logger.error(`Error in ${getCustomFieldsTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to get custom fields");
+  }
 }
 
 export async function handleSetTaskCustomFieldValue(
@@ -122,15 +159,21 @@ export async function handleSetTaskCustomFieldValue(
   logger.info(
     `Handling tool call: ${setTaskCustomFieldValueTool.name} for task_id: ${params.task_id}, field_id: ${params.field_id}`,
   );
-  await clickUpService.customFieldService.setTaskCustomFieldValue(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: `Successfully set custom field ${params.field_id} for task ${params.task_id}.`,
-      },
-    ],
-  };
+  try {
+    await clickUpService.customFieldService.setTaskCustomFieldValue(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Successfully set custom field ${params.field_id} for task ${params.task_id}.`,
+        },
+      ],
+      structuredContent: { success: true },
+    };
+  } catch (error) {
+    logger.error(`Error in ${setTaskCustomFieldValueTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to set task custom field value");
+  }
 }
 
 export async function handleRemoveTaskCustomFieldValue(
@@ -147,13 +190,19 @@ export async function handleRemoveTaskCustomFieldValue(
   logger.info(
     `Handling tool call: ${removeTaskCustomFieldValueTool.name} for task_id: ${params.task_id}, field_id: ${params.field_id}`,
   );
-  await clickUpService.customFieldService.removeTaskCustomFieldValue(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: `Successfully removed custom field ${params.field_id} for task ${params.task_id}.`,
-      },
-    ],
-  };
+  try {
+    await clickUpService.customFieldService.removeTaskCustomFieldValue(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Successfully removed custom field ${params.field_id} for task ${params.task_id}.`,
+        },
+      ],
+      structuredContent: { success: true },
+    };
+  } catch (error) {
+    logger.error(`Error in ${removeTaskCustomFieldValueTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to remove task custom field value");
+  }
 }

@@ -26,6 +26,22 @@ export const getSpacesTool: Tool = {
     },
     required: ["team_id"],
   },
+  outputSchema: {
+    type: "object",
+    properties: {
+      spaces: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            name: { type: "string" }
+          }
+        }
+      }
+    },
+    description: "An object containing an array of space objects in the 'spaces' property.",
+  },
 };
 
 export const createSpaceTool: Tool = {
@@ -48,6 +64,19 @@ export const createSpaceTool: Tool = {
     },
     required: ["team_id", "name"],
   },
+  outputSchema: {
+    type: "object",
+    properties: {
+      space: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" }
+        }
+      }
+    },
+    description: "An object containing the created space object in the 'space' property.",
+  },
 };
 
 export const getSpaceTool: Tool = {
@@ -59,6 +88,19 @@ export const getSpaceTool: Tool = {
       space_id: { type: "string", description: spaceIdDescription },
     },
     required: ["space_id"],
+  },
+  outputSchema: {
+    type: "object",
+    properties: {
+      space: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" }
+        }
+      }
+    },
+    description: "An object containing the space object in the 'space' property.",
   },
 };
 
@@ -119,15 +161,21 @@ export async function handleGetSpaces(
   logger.info(
     `Handling tool call: ${getSpacesTool.name} for team ${params.team_id}`,
   );
-  const responseData = await clickUpService.spaceService.getSpaces(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(responseData.spaces, null, 2),
-      },
-    ],
-  };
+  try {
+    const responseData = await clickUpService.spaceService.getSpaces(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(responseData.spaces, null, 2),
+        },
+      ],
+      structuredContent: { spaces: responseData.spaces },
+    };
+  } catch (error) {
+    logger.error(`Error in ${getSpacesTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to get spaces");
+  }
 }
 
 export async function handleCreateSpace(
@@ -144,15 +192,21 @@ export async function handleCreateSpace(
   logger.info(
     `Handling tool call: ${createSpaceTool.name} for team ${params.team_id}, name ${params.name}`,
   );
-  const responseData = await clickUpService.spaceService.createSpace(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(responseData, null, 2),
-      },
-    ],
-  };
+  try {
+    const responseData = await clickUpService.spaceService.createSpace(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(responseData, null, 2),
+        },
+      ],
+      structuredContent: { space: responseData },
+    };
+  } catch (error) {
+    logger.error(`Error in ${createSpaceTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to create space");
+  }
 }
 
 export async function handleGetSpace(
@@ -166,17 +220,23 @@ export async function handleGetSpace(
   logger.info(
     `Handling tool call: ${getSpaceTool.name} for space ${params.space_id}`,
   );
-  const responseData = await clickUpService.spaceService.getSpace(
-    params.space_id,
-  );
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(responseData, null, 2),
-      },
-    ],
-  };
+  try {
+    const responseData = await clickUpService.spaceService.getSpace(
+      params.space_id,
+    );
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(responseData, null, 2),
+        },
+      ],
+      structuredContent: { space: responseData },
+    };
+  } catch (error) {
+    logger.error(`Error in ${getSpaceTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to get space");
+  }
 }
 
 export async function handleUpdateSpace(
@@ -194,15 +254,21 @@ export async function handleUpdateSpace(
   logger.info(
     `Handling tool call: ${updateSpaceTool.name} for space ${params.space_id}`,
   );
-  const responseData = await clickUpService.spaceService.updateSpace(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(responseData, null, 2),
-      },
-    ],
-  };
+  try {
+    const responseData = await clickUpService.spaceService.updateSpace(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(responseData, null, 2),
+        },
+      ],
+      structuredContent: { space: responseData },
+    };
+  } catch (error) {
+    logger.error(`Error in ${updateSpaceTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to update space");
+  }
 }
 
 export async function handleDeleteSpace(
@@ -216,13 +282,19 @@ export async function handleDeleteSpace(
   logger.info(
     `Handling tool call: ${deleteSpaceTool.name} for space ${params.space_id}`,
   );
-  await clickUpService.spaceService.deleteSpace(params.space_id);
-  return {
-    content: [
-      {
-        type: "text",
-        text: `Space ${params.space_id} deleted successfully.`,
-      },
-    ],
-  };
+  try {
+    await clickUpService.spaceService.deleteSpace(params.space_id);
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Space ${params.space_id} deleted successfully.`,
+        },
+      ],
+      structuredContent: { result: { success: true, message: `Space ${params.space_id} deleted successfully.` } },
+    };
+  } catch (error) {
+    logger.error(`Error in ${deleteSpaceTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to delete space");
+  }
 }

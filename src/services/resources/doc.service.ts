@@ -41,7 +41,7 @@ export class DocService {
 
     // const v3Url = `https://api.clickup.com/api/v3/workspaces/${team_id}/docs`;
     // Corrected path assuming baseURL is https://api.clickup.com/api/v2
-    const v3Url = `/api/v3/workspaces/${team_id}/docs`;
+    const v3Url = `/v3/workspaces/${team_id}/docs`;
 
     try {
       const response = await this.client.get<{ docs: ClickUpDoc[] }>(v3Url, {
@@ -98,7 +98,7 @@ export class DocService {
 
     // const v3Url = `https://api.clickup.com/api/v3/workspaces/${numericWorkspaceId}/docs`;
     // Corrected path assuming baseURL is https://api.clickup.com/api/v2
-    const v3Url = `/api/v3/workspaces/${numericWorkspaceId}/docs`;
+    const v3Url = `/v3/workspaces/${numericWorkspaceId}/docs`;
     logger.debug(`Creating doc (v3) via ${v3Url} with name: "${name}"`);
 
     const requestBody: {
@@ -183,14 +183,14 @@ export class DocService {
 
     // const v3Url = `https://api.clickup.com/api/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages`;
     // Corrected path assuming baseURL is https://api.clickup.com/api/v2
-    const v3Url = `/api/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages`;
+    const v3Url = `/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages`;
 
     try {
-      const response = await this.client.get<{ pages: ClickUpDocPage[] }>(
+      const response = await this.client.get<ClickUpDocPage[]>(
         v3Url,
         { params: {} },
       );
-      return response.data.pages;
+      return response.data;
     } catch (error) {
       const scope = `doc ${doc_id} (workspace: ${numericWorkspaceId})`;
       if (axios.isAxiosError(error)) {
@@ -247,7 +247,7 @@ export class DocService {
       `Creating page in doc ID: ${doc_id} (workspace: ${numericWorkspaceId}) with name: "${name}"`,
     );
 
-    const v3Url = `/api/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages`;
+    const v3Url = `/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages`;
 
     const requestBody: {
       name?: string;
@@ -333,7 +333,7 @@ export class DocService {
 
     // const v3Url = `https://api.clickup.com/api/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages/${page_id}`;
     // Corrected path assuming baseURL is https://api.clickup.com/api/v2
-    const v3Url = `/api/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages/${page_id}`;
+    const v3Url = `/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages/${page_id}`;
     const queryParams: { content_format?: string } = {};
     if (content_format) {
       queryParams.content_format = content_format;
@@ -440,7 +440,7 @@ export class DocService {
 
     // const v3Url = `https://api.clickup.com/api/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages/${page_id}`;
     // Corrected path assuming baseURL is https://api.clickup.com/api/v2
-    const v3Url = `/api/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages/${page_id}`;
+    const v3Url = `/v3/workspaces/${numericWorkspaceId}/docs/${doc_id}/pages/${page_id}`;
 
     const requestBody: {
       name?: string;

@@ -5,7 +5,7 @@ module.exports = {
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },
-  testMatch: ["**/__tests__/**/*.test.ts"],
+  testMatch: ["**/__tests__/**/*.test.ts", "**/__integration__/**/*.test.ts"],
   setupFilesAfterEnv: ["<rootDir>/src/__tests__/setup.js"],
   collectCoverageFrom: [
     "src/**/*.{ts}",

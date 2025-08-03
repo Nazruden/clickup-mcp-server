@@ -76,7 +76,7 @@ function validateConfig(): Config {
     //   authUrl: "https://app.clickup.com/api",
     // },
     clickUpPersonalToken, // Add token directly
-    clickUpApiUrl: "https://api.clickup.com", // CORRECTED: Base URL without API version path
+    clickUpApiUrl: "https://api.clickup.com/api", // Base URL with /api path
     encryptionKey, // Keep encryption key
   };
 }

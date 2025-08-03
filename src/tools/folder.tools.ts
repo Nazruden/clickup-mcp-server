@@ -25,6 +25,22 @@ export const getFoldersTool: Tool = {
     },
     required: ["space_id"],
   },
+  outputSchema: {
+    type: "object",
+    properties: {
+      folders: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            name: { type: "string" }
+          }
+        }
+      }
+    },
+    description: "An object containing an array of folder objects in the 'folders' property.",
+  },
 };
 
 export const createFolderTool: Tool = {
@@ -37,6 +53,19 @@ export const createFolderTool: Tool = {
       name: { type: "string", description: "Name of the new Folder." },
     },
     required: ["space_id", "name"],
+  },
+  outputSchema: {
+    type: "object",
+    properties: {
+      folder: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" }
+        }
+      }
+    },
+    description: "An object containing the created folder object in the 'folder' property.",
   },
 };
 
@@ -89,15 +118,21 @@ export async function handleGetFolders(
   logger.info(
     `Handling tool call: ${getFoldersTool.name} for space ${params.space_id}`,
   );
-  const responseData = await clickUpService.folderService.getFolders(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(responseData.folders, null, 2),
-      },
-    ],
-  };
+  try {
+    const responseData = await clickUpService.folderService.getFolders(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(responseData.folders, null, 2),
+        },
+      ],
+      structuredContent: { folders: responseData.folders },
+    };
+  } catch (error) {
+    logger.error(`Error in ${getFoldersTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to get folders");
+  }
 }
 
 export async function handleCreateFolder(
@@ -114,15 +149,21 @@ export async function handleCreateFolder(
   logger.info(
     `Handling tool call: ${createFolderTool.name} for space ${params.space_id}, name ${params.name}`,
   );
-  const responseData = await clickUpService.folderService.createFolder(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(responseData, null, 2),
-      },
-    ],
-  };
+  try {
+    const responseData = await clickUpService.folderService.createFolder(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(responseData, null, 2),
+        },
+      ],
+      structuredContent: { folder: responseData },
+    };
+  } catch (error) {
+    logger.error(`Error in ${createFolderTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to create folder");
+  }
 }
 
 export async function handleGetFolder(
@@ -136,17 +177,23 @@ export async function handleGetFolder(
   logger.info(
     `Handling tool call: ${getFolderTool.name} for folder ${params.folder_id}`,
   );
-  const responseData = await clickUpService.folderService.getFolder(
-    params.folder_id,
-  );
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(responseData, null, 2),
-      },
-    ],
-  };
+  try {
+    const responseData = await clickUpService.folderService.getFolder(
+      params.folder_id,
+    );
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(responseData, null, 2),
+        },
+      ],
+      structuredContent: { folder: responseData },
+    };
+  } catch (error) {
+    logger.error(`Error in ${getFolderTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to get folder");
+  }
 }
 
 export async function handleUpdateFolder(
@@ -164,15 +211,21 @@ export async function handleUpdateFolder(
   logger.info(
     `Handling tool call: ${updateFolderTool.name} for folder ${params.folder_id}`,
   );
-  const responseData = await clickUpService.folderService.updateFolder(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(responseData, null, 2),
-      },
-    ],
-  };
+  try {
+    const responseData = await clickUpService.folderService.updateFolder(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(responseData, null, 2),
+        },
+      ],
+      structuredContent: { folder: responseData },
+    };
+  } catch (error) {
+    logger.error(`Error in ${updateFolderTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to update folder");
+  }
 }
 
 export async function handleDeleteFolder(
@@ -186,13 +239,19 @@ export async function handleDeleteFolder(
   logger.info(
     `Handling tool call: ${deleteFolderTool.name} for folder ${params.folder_id}`,
   );
-  await clickUpService.folderService.deleteFolder(params.folder_id);
-  return {
-    content: [
-      {
-        type: "text",
-        text: `Folder ${params.folder_id} deleted successfully.`,
-      },
-    ],
-  };
+  try {
+    await clickUpService.folderService.deleteFolder(params.folder_id);
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Folder ${params.folder_id} deleted successfully.`,
+        },
+      ],
+      structuredContent: { result: { success: true, message: `Folder ${params.folder_id} deleted successfully.` } },
+    };
+  } catch (error) {
+    logger.error(`Error in ${deleteFolderTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to delete folder");
+  }
 }

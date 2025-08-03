@@ -25,7 +25,7 @@ export class SpaceService {
         queryParams.archived = params.archived.toString();
       }
 
-      const response = await this.client.get(`/team/${params.team_id}/space`, {
+      const response = await this.client.get(`/v2/team/${params.team_id}/space`, {
         params: queryParams,
       });
       // API v2 for Get Spaces returns { spaces: [...] }
@@ -56,7 +56,7 @@ export class SpaceService {
     try {
       const { team_id, ...bodyParams } = params;
       const response = await this.client.post<ClickUpSpace>(
-        `/team/${team_id}/space`,
+        `/v2/team/${team_id}/space`,
         bodyParams,
       );
       return response.data;
@@ -83,7 +83,7 @@ export class SpaceService {
     logger.debug(`Fetching space ID: ${space_id}`);
     try {
       const response = await this.client.get<ClickUpSpace>(
-        `/space/${space_id}`,
+        `/v2/space/${space_id}`,
       );
       return response.data;
     } catch (error) {
@@ -110,7 +110,7 @@ export class SpaceService {
     logger.debug(`Updating space ID: ${space_id}`);
     try {
       const response = await this.client.put<ClickUpSpace>(
-        `/space/${space_id}`,
+        `/v2/space/${space_id}`,
         bodyParams,
       );
       return response.data;
@@ -137,7 +137,7 @@ export class SpaceService {
     logger.debug(`Deleting space ID: ${space_id}`);
     try {
       const response = await this.client.delete<ClickUpSuccessResponse>(
-        `/space/${space_id}`,
+        `/v2/space/${space_id}`,
       );
       return response.data;
     } catch (error) {

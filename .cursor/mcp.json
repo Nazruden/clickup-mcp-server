@@ -3,10 +3,10 @@
     "clickup_local_dev": {
       "command": "node",
       "args": [
-        "C:/Programmation/MCP/ProjectBuilder/clickup-mcp-server/dist/index.js"
+        "/home/nazruden/Projects/MCP/clickup-mcp-server/dist/index.js"
       ],
       "env": {
-        "CLICKUP_PERSONAL_TOKEN": "pk_158599501_VARD4Z9SLNX7J1654LB812Q9ZWF9DFR9"
+        "CLICKUP_PERSONAL_TOKEN": "pk_158599501_WA3U7UY7WLZETXIG4YESSK1MC06B8IOP"
       }
     }
   }

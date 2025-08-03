@@ -27,7 +27,17 @@ export const createBoardTool: Tool = {
   },
   outputSchema: {
     type: "object",
-    description: "A JSON string representing the created board view object.",
+    properties: {
+      board: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" },
+          type: { type: "string" }
+        }
+      }
+    },
+    description: "An object containing the created board view object in the 'board' property.",
   },
 };
 
@@ -41,7 +51,7 @@ interface CreateBoardArgs {
 export async function handleCreateBoard(
   clickUpService: ClickUpService,
   args: Record<string, unknown>,
-) {
+): Promise<any> {
   const params = args as unknown as CreateBoardArgs;
   // Validate required parameters
   if (!params.space_id || typeof params.space_id !== "string") {
@@ -72,6 +82,8 @@ export async function handleCreateBoard(
           text: JSON.stringify(newView, null, 2),
         },
       ],
+      // AJOUT: structuredContent requis par MCP quand outputSchema est défini
+      structuredContent: { board: newView },
     };
   } catch (error) {
     logger.error(`Error in ${createBoardTool.name}:`, error);

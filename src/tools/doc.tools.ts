@@ -33,6 +33,22 @@ export const searchDocsTool: Tool = {
     },
     required: ["team_id"],
   },
+  outputSchema: {
+    type: "object",
+    properties: {
+      docs: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            name: { type: "string" }
+          }
+        }
+      }
+    },
+    description: "An object containing an array of doc objects in the 'docs' property.",
+  },
 };
 
 export const createDocTool: Tool = {
@@ -66,8 +82,8 @@ export const createDocTool: Tool = {
       },
       visibility: {
         type: "string",
-        enum: ["private", "workspace", "public"],
-        description: "Optional: Visibility of the Doc.",
+        enum: ["PUBLIC", "PRIVATE", "PERSONAL", "HIDDEN"],
+        description: "Optional: Visibility of the Doc. Must be one of: PUBLIC, PRIVATE, PERSONAL, HIDDEN.",
       },
       create_page: {
         type: "boolean",
@@ -76,6 +92,19 @@ export const createDocTool: Tool = {
       },
     },
     required: ["workspace_id", "name"],
+  },
+  outputSchema: {
+    type: "object",
+    properties: {
+      doc: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" }
+        }
+      }
+    },
+    description: "An object containing the created doc object in the 'doc' property.",
   },
 };
 
@@ -92,6 +121,22 @@ export const getDocPagesTool: Tool = {
       doc_id: { type: "string", description: "The ID of the Doc." },
     },
     required: ["workspace_id", "doc_id"],
+  },
+  outputSchema: {
+    type: "object",
+    properties: {
+      pages: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            name: { type: "string" }
+          }
+        }
+      }
+    },
+    description: "An object containing an array of page objects in the 'pages' property.",
   },
 };
 
@@ -139,6 +184,19 @@ export const createDocPageTool: Tool = {
     },
     required: ["workspace_id", "doc_id", "name"],
   },
+  outputSchema: {
+    type: "object",
+    properties: {
+      page: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" }
+        }
+      }
+    },
+    description: "An object containing the created page object in the 'page' property.",
+  },
 };
 
 export const getDocPageContentTool: Tool = {
@@ -163,6 +221,20 @@ export const getDocPageContentTool: Tool = {
       },
     },
     required: ["workspace_id", "doc_id", "page_id"],
+  },
+  outputSchema: {
+    type: "object",
+    properties: {
+      content: { type: "string" },
+      page: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" }
+        }
+      }
+    },
+    description: "An object containing the page content and metadata.",
   },
 };
 
@@ -208,6 +280,20 @@ export const editDocPageContentTool: Tool = {
     },
     required: ["workspace_id", "doc_id", "page_id", "content"],
   },
+  outputSchema: {
+    type: "object",
+    properties: {
+      page: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" }
+        }
+      },
+      success: { type: "boolean" }
+    },
+    description: "An object containing the updated page object and success status.",
+  },
 };
 
 // Handler Functions
@@ -222,15 +308,21 @@ export async function handleSearchDocs(
   logger.info(
     `Handling tool call: ${searchDocsTool.name} for team ${params.team_id}`,
   );
-  const docs = await clickUpService.docService.searchDocs(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(docs, null, 2),
-      },
-    ],
-  };
+  try {
+    const docs = await clickUpService.docService.searchDocs(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(docs, null, 2),
+        },
+      ],
+      structuredContent: { docs },
+    };
+  } catch (error) {
+    logger.error(`Error in ${searchDocsTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to search docs");
+  }
 }
 
 export async function handleCreateDoc(
@@ -247,15 +339,21 @@ export async function handleCreateDoc(
   logger.info(
     `Handling tool call: ${createDocTool.name} for workspace ${params.workspace_id} with name ${params.name}`,
   );
-  const newDoc = await clickUpService.docService.createDoc(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(newDoc, null, 2),
-      },
-    ],
-  };
+  try {
+    const newDoc = await clickUpService.docService.createDoc(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(newDoc, null, 2),
+        },
+      ],
+      structuredContent: { doc: newDoc },
+    };
+  } catch (error) {
+    logger.error(`Error in ${createDocTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to create doc");
+  }
 }
 
 export async function handleGetDocPages(
@@ -269,15 +367,21 @@ export async function handleGetDocPages(
   logger.info(
     `Handling tool call: ${getDocPagesTool.name} for doc ${params.doc_id}`,
   );
-  const pages = await clickUpService.docService.getDocPages(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(pages, null, 2),
-      },
-    ],
-  };
+  try {
+    const pages = await clickUpService.docService.getDocPages(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(pages, null, 2),
+        },
+      ],
+      structuredContent: { pages },
+    };
+  } catch (error) {
+    logger.error(`Error in ${getDocPagesTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to get doc pages");
+  }
 }
 
 export async function handleCreateDocPage(
@@ -297,15 +401,21 @@ export async function handleCreateDocPage(
   logger.info(
     `Handling tool call: ${createDocPageTool.name} for doc ${params.doc_id} in workspace ${params.workspace_id}`,
   );
-  const newPage = await clickUpService.docService.createDocPage(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify(newPage, null, 2),
-      },
-    ],
-  };
+  try {
+    const newPage = await clickUpService.docService.createDocPage(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(newPage, null, 2),
+        },
+      ],
+      structuredContent: { page: newPage },
+    };
+  } catch (error) {
+    logger.error(`Error in ${createDocPageTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to create doc page");
+  }
 }
 
 export async function handleGetDocPageContent(
@@ -325,18 +435,27 @@ export async function handleGetDocPageContent(
   logger.info(
     `Handling tool call: ${getDocPageContentTool.name} for page ${params.page_id} in doc ${params.doc_id}, workspace ${params.workspace_id}`,
   );
-  const pageContent = await clickUpService.docService.getDocPageContent(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text:
-          typeof pageContent === "string"
-            ? pageContent
-            : JSON.stringify(pageContent, null, 2),
+  try {
+    const pageContent = await clickUpService.docService.getDocPageContent(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text:
+            typeof pageContent === "string"
+              ? pageContent
+              : JSON.stringify(pageContent, null, 2),
+        },
+      ],
+      structuredContent: { 
+        content: typeof pageContent === "string" ? pageContent : pageContent,
+        page: { id: params.page_id, name: "Page Content" }
       },
-    ],
-  };
+    };
+  } catch (error) {
+    logger.error(`Error in ${getDocPageContentTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to get doc page content");
+  }
 }
 
 export async function handleEditDocPageContent(
@@ -359,15 +478,24 @@ export async function handleEditDocPageContent(
   logger.info(
     `Handling tool call: ${editDocPageContentTool.name} for page ${params.page_id} in doc ${params.doc_id}, workspace ${params.workspace_id}`,
   );
-  await clickUpService.docService.editDocPageContent(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: `Successfully edited page ${params.page_id}.`,
+  try {
+    await clickUpService.docService.editDocPageContent(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Successfully edited page ${params.page_id}.`,
+        },
+      ],
+      structuredContent: { 
+        page: { id: params.page_id, name: params.title || "Updated Page" },
+        success: true 
       },
-    ],
-  };
+    };
+  } catch (error) {
+    logger.error(`Error in ${editDocPageContentTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to edit doc page content");
+  }
 }
 
 export const docTools = [

@@ -81,6 +81,20 @@ export const createTaskTool: Tool = {
     },
     required: ["list_id", "name"],
   },
+  outputSchema: {
+    type: "object",
+    properties: {
+      task: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" },
+          status: { type: "string" }
+        }
+      }
+    },
+    description: "An object containing the created task object in the 'task' property.",
+  },
 };
 
 export const updateTaskTool: Tool = {
@@ -97,6 +111,20 @@ export const updateTaskTool: Tool = {
       ...taskSchema.properties,
     },
     required: ["task_id"],
+  },
+  outputSchema: {
+    type: "object",
+    properties: {
+      task: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" },
+          status: { type: "string" }
+        }
+      }
+    },
+    description: "An object containing the updated task object in the 'task' property.",
   },
 };
 
@@ -165,6 +193,7 @@ export async function handleCreateTask(
         text: JSON.stringify(response, null, 2),
       },
     ],
+    structuredContent: { task: response },
   };
 }
 
@@ -239,5 +268,6 @@ export async function handleUpdateTask(
         text: JSON.stringify(response, null, 2),
       },
     ],
+    structuredContent: { task: response },
   };
 }

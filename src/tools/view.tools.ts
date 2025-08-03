@@ -47,6 +47,23 @@ export const getViewsTool: Tool = {
     },
     required: ["parent_id", "parent_type"],
   },
+  outputSchema: {
+    type: "object",
+    properties: {
+      views: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            name: { type: "string" },
+            type: { type: "string" }
+          }
+        }
+      }
+    },
+    description: "An object containing an array of view objects in the 'views' property.",
+  },
 };
 
 export const createViewTool: Tool = {
@@ -76,6 +93,20 @@ export const createViewTool: Tool = {
     },
     required: ["parent_id", "parent_type", "name", "type"],
   },
+  outputSchema: {
+    type: "object",
+    properties: {
+      view: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" },
+          type: { type: "string" }
+        }
+      }
+    },
+    description: "An object containing the created view object in the 'view' property.",
+  },
 };
 
 export const getViewDetailsTool: Tool = {
@@ -87,6 +118,20 @@ export const getViewDetailsTool: Tool = {
       view_id: { type: "string", description: viewIdDescription },
     },
     required: ["view_id"],
+  },
+  outputSchema: {
+    type: "object",
+    properties: {
+      view: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" },
+          type: { type: "string" }
+        }
+      }
+    },
+    description: "An object containing the view details object in the 'view' property.",
   },
 };
 
@@ -102,6 +147,20 @@ export const updateViewTool: Tool = {
     },
     required: ["view_id"],
   },
+  outputSchema: {
+    type: "object",
+    properties: {
+      view: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" },
+          type: { type: "string" }
+        }
+      }
+    },
+    description: "An object containing the updated view object in the 'view' property.",
+  },
 };
 
 export const deleteViewTool: Tool = {
@@ -113,6 +172,13 @@ export const deleteViewTool: Tool = {
       view_id: { type: "string", description: viewIdDescription },
     },
     required: ["view_id"],
+  },
+  outputSchema: {
+    type: "object",
+    properties: {
+      success: { type: "boolean" }
+    },
+    description: "An object containing the deletion success status.",
   },
 };
 
@@ -129,6 +195,17 @@ export const getViewTasksTool: Tool = {
       },
     },
     required: ["view_id"],
+  },
+  outputSchema: {
+    type: "object",
+    properties: {
+      tasks: {
+        type: "array",
+        items: { type: "object" }
+      },
+      last_page: { type: "boolean" }
+    },
+    description: "An object containing the tasks array and pagination info.",
   },
 };
 
@@ -150,15 +227,21 @@ export async function handleGetViews(
   logger.info(
     `Handling tool call: ${getViewsTool.name} for ${params.parent_type} ${params.parent_id}`,
   );
-  const views = await clickUpService.viewService.getViews(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: `Retrieved ${views.length} views for ${params.parent_type} ${params.parent_id}. Details: ${JSON.stringify(views, null, 2)}`,
-      },
-    ],
-  };
+  try {
+    const views = await clickUpService.viewService.getViews(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Retrieved ${views.length} views for ${params.parent_type} ${params.parent_id}. Details: ${JSON.stringify(views, null, 2)}`,
+        },
+      ],
+      structuredContent: { views },
+    };
+  } catch (error) {
+    logger.error(`Error in ${getViewsTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to get views");
+  }
 }
 
 export async function handleCreateView(
@@ -189,15 +272,21 @@ export async function handleCreateView(
   logger.info(
     `Handling tool call: ${createViewTool.name} for ${params.parent_type} ${params.parent_id}`,
   );
-  const newView = await clickUpService.viewService.createView(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: `Successfully created view: ${newView.name}. Details: ${JSON.stringify(newView, null, 2)}`,
-      },
-    ],
-  };
+  try {
+    const newView = await clickUpService.viewService.createView(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Successfully created view: ${newView.name}. Details: ${JSON.stringify(newView, null, 2)}`,
+        },
+      ],
+      structuredContent: { view: newView },
+    };
+  } catch (error) {
+    logger.error(`Error in ${createViewTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to create view");
+  }
 }
 
 export async function handleGetViewDetails(
@@ -211,17 +300,23 @@ export async function handleGetViewDetails(
   logger.info(
     `Handling tool call: ${getViewDetailsTool.name} for view ${params.view_id}`,
   );
-  const viewDetails = await clickUpService.viewService.getViewDetails(
-    params.view_id,
-  );
-  return {
-    content: [
-      {
-        type: "text",
-        text: `Retrieved details for view: ${viewDetails.name}. Details: ${JSON.stringify(viewDetails, null, 2)}`,
-      },
-    ],
-  };
+  try {
+    const viewDetails = await clickUpService.viewService.getViewDetails(
+      params.view_id,
+    );
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Retrieved details for view: ${viewDetails.name}. Details: ${JSON.stringify(viewDetails, null, 2)}`,
+        },
+      ],
+      structuredContent: { view: viewDetails },
+    };
+  } catch (error) {
+    logger.error(`Error in ${getViewDetailsTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to get view details");
+  }
 }
 
 export async function handleUpdateView(
@@ -247,15 +342,21 @@ export async function handleUpdateView(
     `Handling tool call: ${updateViewTool.name} for view ${params.view_id}`,
   );
   // ViewService.updateView expects the full UpdateViewParams object as a single argument
-  const updatedView = await clickUpService.viewService.updateView(params);
-  return {
-    content: [
-      {
-        type: "text",
-        text: `Successfully updated view: ${updatedView.name}. Details: ${JSON.stringify(updatedView, null, 2)}`,
-      },
-    ],
-  };
+  try {
+    const updatedView = await clickUpService.viewService.updateView(params);
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Successfully updated view: ${updatedView.name}. Details: ${JSON.stringify(updatedView, null, 2)}`,
+        },
+      ],
+      structuredContent: { view: updatedView },
+    };
+  } catch (error) {
+    logger.error(`Error in ${updateViewTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to update view");
+  }
 }
 
 export async function handleDeleteView(
@@ -269,15 +370,21 @@ export async function handleDeleteView(
   logger.info(
     `Handling tool call: ${deleteViewTool.name} for view ${params.view_id}`,
   );
-  await clickUpService.viewService.deleteView(params.view_id);
-  return {
-    content: [
-      {
-        type: "text",
-        text: "View successfully deleted.",
-      },
-    ],
-  };
+  try {
+    await clickUpService.viewService.deleteView(params.view_id);
+    return {
+      content: [
+        {
+          type: "text",
+          text: "View successfully deleted.",
+        },
+      ],
+      structuredContent: { success: true },
+    };
+  } catch (error) {
+    logger.error(`Error in ${deleteViewTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to delete view");
+  }
 }
 
 export async function handleGetViewTasks(
@@ -301,15 +408,21 @@ export async function handleGetViewTasks(
   logger.info(
     `Handling tool call: ${getViewTasksTool.name} for view ${params.view_id}, page: ${params.page}`,
   );
-  const serviceResponse = await clickUpService.viewService.getViewTasks(params);
-  const tasks = serviceResponse.tasks;
+  try {
+    const serviceResponse = await clickUpService.viewService.getViewTasks(params);
+    const tasks = serviceResponse.tasks;
 
-  return {
-    content: [
-      {
-        type: "text",
-        text: `Retrieved ${tasks.length} tasks for view ${params.view_id}. Page: ${params.page !== undefined ? params.page : "all/first"}. Last Page: ${serviceResponse.last_page}. Details: ${JSON.stringify(tasks, null, 2)}`,
-      },
-    ],
-  };
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Retrieved ${tasks.length} tasks for view ${params.view_id}. Page: ${params.page !== undefined ? params.page : "all/first"}. Last Page: ${serviceResponse.last_page}. Details: ${JSON.stringify(tasks, null, 2)}`,
+        },
+      ],
+      structuredContent: { tasks: serviceResponse.tasks, last_page: serviceResponse.last_page },
+    };
+  } catch (error) {
+    logger.error(`Error in ${getViewTasksTool.name}:`, error);
+    throw error instanceof Error ? error : new Error("Failed to get view tasks");
+  }
 }

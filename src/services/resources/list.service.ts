@@ -26,8 +26,8 @@ export class ListService {
 
     const apiUrl =
       parent_type === "folder"
-        ? `/api/v2/folder/${parent_id}/list`
-        : `/api/v2/space/${parent_id}/list`;
+        ? `/v2/folder/${parent_id}/list`
+        : `/v2/space/${parent_id}/list`;
 
     const requestBody: any = { name };
     // Add other optional fields from params.body if they are part of CreateListParams and valid for API
