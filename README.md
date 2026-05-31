@@ -162,6 +162,39 @@ The following MCP tools are currently implemented:
   - Requires: `view_id`.
   - Optional: `page` (number: 0-indexed page number for pagination).
 
+### Comment Management
+
+- `clickup_get_task_comments`: Retrieves all comments for a task.
+  - Requires: `task_id`.
+- `clickup_create_task_comment`: Adds a comment to a task.
+  - Requires: `task_id`, `comment_text`.
+  - Optional: `assignee` (user ID), `notify_all` (boolean, default false).
+- `clickup_update_comment`: Updates a comment's text, assignee, or resolved state.
+  - Requires: `comment_id`.
+  - Optional: `comment_text`, `assignee`, `resolved` (boolean).
+- `clickup_delete_comment`: Deletes a comment.
+  - Requires: `comment_id`.
+
+### Checklist Management
+
+- `clickup_get_task_checklists`: Retrieves all checklists (with items) for a task.
+  - Requires: `task_id`.
+- `clickup_create_checklist`: Creates a checklist on a task.
+  - Requires: `task_id`, `name`.
+- `clickup_update_checklist`: Renames or reorders a checklist.
+  - Requires: `checklist_id`.
+  - Optional: `name`, `position` (number).
+- `clickup_delete_checklist`: Deletes a checklist and its items.
+  - Requires: `checklist_id`.
+- `clickup_create_checklist_item`: Adds an item to a checklist.
+  - Requires: `checklist_id`, `name`.
+  - Optional: `assignee` (user ID).
+- `clickup_update_checklist_item`: Updates an item — rename, mark resolved/unresolved, or nest under a parent.
+  - Requires: `checklist_id`, `checklist_item_id`.
+  - Optional: `name`, `resolved` (boolean — set true to check off), `parent` (item ID).
+- `clickup_delete_checklist_item`: Deletes a checklist item.
+  - Requires: `checklist_id`, `checklist_item_id`.
+
 ## Development
 
 1.  Clone the repository:
