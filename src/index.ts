@@ -112,6 +112,32 @@ import {
   handleCreateList,
 } from "./tools/list.tools.js";
 import { createBoardTool, handleCreateBoard } from "./tools/board.tools.js";
+import {
+  getTaskCommentsTool,
+  createTaskCommentTool,
+  updateCommentTool,
+  deleteCommentTool,
+  handleGetTaskComments,
+  handleCreateTaskComment,
+  handleUpdateComment,
+  handleDeleteComment,
+} from "./tools/comment.tools.js";
+import {
+  getTaskChecklistsTool,
+  createChecklistTool,
+  updateChecklistTool,
+  deleteChecklistTool,
+  createChecklistItemTool,
+  updateChecklistItemTool,
+  deleteChecklistItemTool,
+  handleGetTaskChecklists,
+  handleCreateChecklist,
+  handleUpdateChecklist,
+  handleDeleteChecklist,
+  handleCreateChecklistItem,
+  handleUpdateChecklistItem,
+  handleDeleteChecklistItem,
+} from "./tools/checklist.tools.js";
 
 // Tool Schemas - REMOVE taskSchema definition if only used in task.tools.ts
 const commonIdDescription =
@@ -165,6 +191,17 @@ async function main() {
           deleteViewTool,
           getViewTasksTool,
           createListTool,
+          getTaskCommentsTool,
+          createTaskCommentTool,
+          updateCommentTool,
+          deleteCommentTool,
+          getTaskChecklistsTool,
+          createChecklistTool,
+          updateChecklistTool,
+          deleteChecklistTool,
+          createChecklistItemTool,
+          updateChecklistItemTool,
+          deleteChecklistItemTool,
         },
       },
     };
@@ -264,6 +301,32 @@ async function main() {
               return await handleCreateBoard(clickUpService, args);
             case createListTool.name:
               return await handleCreateList(clickUpService, args);
+
+            // --- Comments ---
+            case getTaskCommentsTool.name:
+              return await handleGetTaskComments(clickUpService, args);
+            case createTaskCommentTool.name:
+              return await handleCreateTaskComment(clickUpService, args);
+            case updateCommentTool.name:
+              return await handleUpdateComment(clickUpService, args);
+            case deleteCommentTool.name:
+              return await handleDeleteComment(clickUpService, args);
+
+            // --- Checklists ---
+            case getTaskChecklistsTool.name:
+              return await handleGetTaskChecklists(clickUpService, args);
+            case createChecklistTool.name:
+              return await handleCreateChecklist(clickUpService, args);
+            case updateChecklistTool.name:
+              return await handleUpdateChecklist(clickUpService, args);
+            case deleteChecklistTool.name:
+              return await handleDeleteChecklist(clickUpService, args);
+            case createChecklistItemTool.name:
+              return await handleCreateChecklistItem(clickUpService, args);
+            case updateChecklistItemTool.name:
+              return await handleUpdateChecklistItem(clickUpService, args);
+            case deleteChecklistItemTool.name:
+              return await handleDeleteChecklistItem(clickUpService, args);
 
             default:
               throw new Error(`Unknown tool: ${request.params.name}`);
