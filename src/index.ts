@@ -40,9 +40,15 @@ import {
 import {
   createTaskTool,
   updateTaskTool,
+  getTaskTool,
   handleCreateTask,
   handleUpdateTask,
+  handleGetTask,
 } from "./tools/task.tools.js";
+import {
+  searchTasksByTagsTool,
+  handleSearchTasksByTags,
+} from "./tools/search.tools.js";
 import {
   getSpacesTool,
   createSpaceTool,
@@ -165,6 +171,8 @@ async function main() {
           deleteViewTool,
           getViewTasksTool,
           createListTool,
+          getTaskTool,
+          searchTasksByTagsTool,
         },
       },
     };
@@ -264,6 +272,12 @@ async function main() {
               return await handleCreateBoard(clickUpService, args);
             case createListTool.name:
               return await handleCreateList(clickUpService, args);
+
+            // --- Task read & search ---
+            case getTaskTool.name:
+              return await handleGetTask(clickUpService, args);
+            case searchTasksByTagsTool.name:
+              return await handleSearchTasksByTags(clickUpService, args);
 
             default:
               throw new Error(`Unknown tool: ${request.params.name}`);
