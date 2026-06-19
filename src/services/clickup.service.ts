@@ -53,6 +53,7 @@ import { CustomFieldService } from "./resources/custom-field.service.js";
 import { DocService } from "./resources/doc.service.js";
 import { ViewService } from "./resources/view.service.js";
 import { ListService } from "./resources/list.service.js";
+import { SearchService } from "./resources/search.service.js";
 
 // Remove TokenData interface if not used elsewhere (it was removed from types.ts)
 
@@ -70,6 +71,7 @@ export class ClickUpService {
   private _docService: DocService;
   private _viewService: ViewService;
   private _listService: ListService;
+  private _searchService: SearchService;
   // Add other resource services here later
 
   constructor() {
@@ -139,6 +141,7 @@ export class ClickUpService {
     this._docService = new DocService(this.client);
     this._viewService = new ViewService(this.client);
     this._listService = new ListService(this.client);
+    this._searchService = new SearchService(this.client);
     // Instantiate other services here later
 
     logger.info("ClickUpService initialized with all resource services.");
@@ -165,6 +168,9 @@ export class ClickUpService {
   }
   public get listService(): ListService {
     return this._listService;
+  }
+  public get searchService(): SearchService {
+    return this._searchService;
   }
   // Add other accessors here later
 

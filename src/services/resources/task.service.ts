@@ -36,6 +36,41 @@ export class TaskService {
     }
   }
 
+  async getTask(
+    taskId: string,
+    options: {
+      custom_task_ids?: boolean;
+      team_id?: string;
+      include_subtasks?: boolean;
+      include_markdown_description?: boolean;
+    } = {},
+  ): Promise<any> {
+    logger.debug(`Getting task ${taskId}`);
+    const params: Record<string, string> = {};
+    if (options.custom_task_ids) params.custom_task_ids = "true";
+    if (options.team_id) params.team_id = options.team_id;
+    if (options.include_subtasks) params.include_subtasks = "true";
+    if (options.include_markdown_description)
+      params.include_markdown_description = "true";
+    try {
+      const response = await this.client.get<any>(`/v2/task/${taskId}`, {
+        params,
+      });
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        logger.error(`Axios error getting task ${taskId}: ${error.message}`, {
+          status: error.response?.status,
+          data: error.response?.data,
+          url: error.config?.url,
+        });
+      } else if (error instanceof Error) {
+        logger.error(`Generic error getting task ${taskId}: ${error.message}`);
+      }
+      throw new Error("Failed to retrieve task from ClickUp");
+    }
+  }
+
   async updateTask(
     taskId: string,
     updates: any,

@@ -70,6 +70,13 @@ The following MCP tools are currently implemented:
 - `clickup_update_task`: Update an existing task's properties.
   - Requires: `task_id`.
   - Optional: Any writable `ClickUpTask` properties.
+- `clickup_get_task`: Retrieve a single task with full details (description/body, status, assignees, tags, priority, custom fields).
+  - Requires: `task_id`.
+  - Optional: `include_markdown_description` (boolean), `include_subtasks` (boolean), `custom_task_ids` (boolean — set when `task_id` is a custom ID like `ABC-123`), `team_id` (required when `custom_task_ids` is true).
+- `clickup_search_tasks_by_tags`: Find tasks in a workspace by tag using ClickUp's native server-side tag filter. Returns one page of compact task summaries.
+  - Requires: `tags` (array of tag names; a task matches if it has any of them).
+  - Optional: `team_id` (defaults to the first accessible workspace), `statuses`, `list_ids`, `assignees`, `include_closed` (boolean), `page` (number, 100 tasks/page).
+  - Note: ClickUp API v2 has no full-text task search, so free-text matching is not supported.
 
 ### Team & List Management
 

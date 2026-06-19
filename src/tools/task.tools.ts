@@ -55,6 +55,41 @@ const taskSchema = {
 };
 
 // Tool Definitions
+export const getTaskTool: Tool = {
+  name: "clickup_get_task",
+  description:
+    "Retrieve a single ClickUp task with full details (description/body, status, assignees, tags, priority, custom fields).",
+  inputSchema: {
+    type: "object",
+    properties: {
+      task_id: {
+        type: "string",
+        description:
+          "The identifier of the task. Use the internal ID, or a custom ID (e.g. 'ABC-123') together with custom_task_ids=true and team_id.",
+      },
+      include_markdown_description: {
+        type: "boolean",
+        description:
+          "If true, include the task description rendered as Markdown (markdown_description field).",
+      },
+      include_subtasks: {
+        type: "boolean",
+        description: "If true, include subtasks of the task.",
+      },
+      custom_task_ids: {
+        type: "boolean",
+        description:
+          "Set true when task_id is a custom ID (e.g. 'ABC-123'). Requires team_id.",
+      },
+      team_id: {
+        type: "string",
+        description: "Workspace (Team) ID. Required when custom_task_ids is true.",
+      },
+    },
+    required: ["task_id"],
+  },
+};
+
 export const createTaskTool: Tool = {
   name: "clickup_create_task",
   description: "Create a new task in ClickUp workspace",
@@ -152,6 +187,32 @@ export const updateTaskTool: Tool = {
 
 // Handler Functions
 // These functions now accept the ClickUpService instance
+
+export async function handleGetTask(
+  clickUpService: ClickUpService,
+  args: Record<string, unknown>,
+) {
+  const taskId = args.task_id as string;
+  if (!taskId || typeof taskId !== "string") {
+    throw new Error("task_id is required and must be a string.");
+  }
+  if (args.custom_task_ids && !args.team_id) {
+    throw new Error("team_id is required when custom_task_ids is true.");
+  }
+  logger.info(`Handling tool call: ${getTaskTool.name} for task ${taskId}`);
+  const task = await clickUpService.taskService.getTask(taskId, {
+    custom_task_ids: args.custom_task_ids as boolean | undefined,
+    team_id: args.team_id as string | undefined,
+    include_subtasks: args.include_subtasks as boolean | undefined,
+    include_markdown_description: args.include_markdown_description as
+      | boolean
+      | undefined,
+  });
+  return {
+    content: [{ type: "text", text: JSON.stringify(task, null, 2) }],
+    structuredContent: { task },
+  };
+}
 
 // Interface for arguments expected by createTaskTool, based on its inputSchema
 interface CreateTaskToolArgs {
